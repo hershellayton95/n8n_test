@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T21:42:21.526Z",
+  "updatedAt": "2025-09-27T21:46:41.248Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
   "active": true,
@@ -641,7 +641,7 @@
         "chatId": "=104350862",
         "binaryData": true,
         "additionalFields": {
-          "caption": "={{ $('Append or update row in sheet').item.json.descrizione }}\ncontattare: {{ $('Append or update row in sheet').item.json.contatto }}"
+          "caption": "={{ $('Append or update row in sheet').item.json.descrizione }}"
         }
       },
       "type": "n8n-nodes-base.telegram",
@@ -1072,7 +1072,7 @@
       }
     ]
   },
-  "versionId": "c3bc4885-77b7-495b-b727-7fe1f46a6720",
+  "versionId": "8ca1c559-b056-47f8-a92c-93999698a633",
   "triggerCount": 1,
   "tags": [],
   "shared": [
