@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T21:46:41.248Z",
+  "updatedAt": "2025-09-27T21:50:31.847Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
   "active": true,
@@ -641,7 +641,7 @@
         "chatId": "=104350862",
         "binaryData": true,
         "additionalFields": {
-          "caption": "={{ $('Append or update row in sheet').item.json.descrizione }}"
+          "caption": "=In data {{ $('Append or update row in sheet').item.json.data }}, alle ore {{ $('Append or update row in sheet').item.json.ora }} si terra il seguente evento:\n{{ $('Append or update row in sheet').item.json.descrizione }}\ncontattare: {{ $('Append or update row in sheet').item.json.contatto }}"
         }
       },
       "type": "n8n-nodes-base.telegram",
@@ -1072,7 +1072,7 @@
       }
     ]
   },
-  "versionId": "8ca1c559-b056-47f8-a92c-93999698a633",
+  "versionId": "1faa3b68-6b7c-474e-a98d-c525b160e88c",
   "triggerCount": 1,
   "tags": [],
   "shared": [
