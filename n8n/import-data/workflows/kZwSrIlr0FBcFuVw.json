@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T09:12:44.477Z",
+  "updatedAt": "2025-09-27T15:57:40.682Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
   "active": false,
@@ -55,7 +55,7 @@
         "filter": {
           "folderId": {
             "__rl": true,
-            "value": "=1vP9WAtBLkoPHHgp8E7L_LftpVqmFlAo5",
+            "value": "=1JasKxZmeWERdFwsj1zAsbxdqniYjX7Ax",
             "mode": "id"
           }
         },
@@ -194,8 +194,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        592,
-        48
+        608,
+        0
       ],
       "id": "39e9b881-9b50-45b7-815c-5af89418e742",
       "name": "Read/Write Files from Disk1"
@@ -210,7 +210,7 @@
         },
         "folderId": {
           "__rl": true,
-          "value": "=1vP9WAtBLkoPHHgp8E7L_LftpVqmFlAo5",
+          "value": "=1JasKxZmeWERdFwsj1zAsbxdqniYjX7Ax",
           "mode": "id"
         },
         "options": {}
@@ -219,7 +219,7 @@
       "typeVersion": 3,
       "position": [
         736,
-        48
+        0
       ],
       "id": "6b2ae995-14af-4781-ac48-7c0083acc71d",
       "name": "Upload file",
@@ -232,16 +232,286 @@
     },
     {
       "parameters": {
-        "command": "rm \"/tmp/DevOps - Introduction.pdf\""
+        "command": "=[ -f \"/tmp/{{ $json.filename }}\" ] && rm \"/tmp/{{ $json.filename }}\"  && echo \"File  \\\"/tmp/{{ $json.filename }}\\\" eliminato.\" || echo \"Il file \\\"/tmp/{{ $json.filename }}\\\"  non esiste.\""
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        880,
+        928,
         -64
       ],
       "id": "03688d73-e45f-4a5b-aaaa-37eb7ced57a4",
       "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        928,
+        80
+      ],
+      "id": "2c77d3b5-714d-4358-9430-aeafb293ce15",
+      "name": "Download file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "434c9bdd-3852-4804-a05e-00ee39841bf3",
+              "name": "source",
+              "value": "GDrive",
+              "type": "string"
+            },
+            {
+              "id": "f98bac67-1d8f-4a73-a642-d99aa0329326",
+              "name": "fileName",
+              "value": "=slip_{{   $now.format('ddLLyyyyHHmm') }}.{{ $json.fileExtension }}",
+              "type": "string"
+            },
+            {
+              "id": "8f13ce04-3ab7-478e-98af-d8353eec478a",
+              "name": "fileId",
+              "value": "={{ $json.permissions[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        80
+      ],
+      "id": "49d6221d-60a5-496b-9039-6c26897bd0b0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "^image/(jpg|jpeg|png)$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "559d6167-b784-4e0b-94be-8fc6a2bb3cd1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aafa2ba0-a9f0-45ff-82b4-e4166ab5d26b",
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        528,
+        384
+      ],
+      "id": "bf1d4bc8-4aaa-415a-8bba-03ca5a2f32e0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mistralAi",
+      "typeVersion": 1,
+      "position": [
+        752,
+        480
+      ],
+      "id": "330d55ea-bfcc-43c8-8281-069f7ea18f88",
+      "name": "Extract text PDF",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "OiGDnJhYajdQp1Cb",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mistralAi",
+      "typeVersion": 1,
+      "position": [
+        752,
+        288
+      ],
+      "id": "1fd77592-19fa-46c9-93df-cedb0623c2c8",
+      "name": "Extract text Image",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "OiGDnJhYajdQp1Cb",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        416
+      ],
+      "id": "af3e7ce5-8994-4a62-9199-b2c59acab419",
+      "name": "Wait",
+      "webhookId": "4f8ce6b0-f70a-4fd2-a7e6-bb8ddfa2656b"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pages": "={{ $json.index }}",
+            "markdown": "={{ $json.markdown }}"
+          },
+          "matchingColumns": [
+            "pages"
+          ],
+          "schema": [
+            {
+              "id": "pages",
+              "displayName": "pages",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "markdown",
+              "displayName": "markdown",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1552,
+        416
+      ],
+      "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "pages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        400
+      ],
+      "id": "fd8a2413-192d-4b52-8640-a399b8a63165",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1264,
+        400
+      ],
+      "id": "c2ab869c-de5b-4091-9dd1-1febed13d6d7",
+      "name": "Loop Over Items"
     }
   ],
   "connections": {
@@ -376,6 +646,123 @@
             "node": "Execute Command",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        []
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract text Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract text PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract text Image": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract text PDF": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -389,110 +776,149 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {
-    "Search files and folders": [
+    "Upload file": [
       {
         "json": {
-          "id": "1Qg1hhqxb-W20qTfLAu6CQQ1syBc-3uz3",
-          "name": "DevOps - Introduction.pdf"
-        }
-      }
-    ],
-    "Crypto": [
-      {
-        "json": {
-          "update_id": 97696520,
-          "message": {
-            "message_id": 69,
-            "from": {
-              "id": 104350862,
-              "is_bot": false,
-              "first_name": "Filippo",
-              "last_name": "Di Marco",
-              "username": "HershelLayton95",
-              "language_code": "it"
+          "kind": "drive#file",
+          "id": "1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB",
+          "name": "boarding-pass (3).pdf",
+          "mimeType": "application/pdf",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "parents": [
+            "1JasKxZmeWERdFwsj1zAsbxdqniYjX7Ax"
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "version": "2",
+          "webContentLink": "https://drive.google.com/uc?id=1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB&export=download",
+          "webViewLink": "https://drive.google.com/file/d/1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB/view?usp=drivesdk",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/pdf",
+          "hasThumbnail": false,
+          "thumbnailVersion": "0",
+          "viewedByMe": false,
+          "createdTime": "2025-09-27T15:40:25.449Z",
+          "modifiedTime": "2025-09-27T15:40:26.448Z",
+          "modifiedByMeTime": "2025-09-27T15:40:26.448Z",
+          "modifiedByMe": true,
+          "owners": [
+            {
+              "kind": "drive#user",
+              "displayName": "Filippo Di Marco",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocKLJy7q7TTuNEUObIs5x0IzpWbD3CdDMBySQmTRJ92mdNeld7kO=s64",
+              "me": true,
+              "permissionId": "02979968928639156644",
+              "emailAddress": "filidm5795@gmail.com"
+            }
+          ],
+          "lastModifyingUser": {
+            "kind": "drive#user",
+            "displayName": "Filippo Di Marco",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocKLJy7q7TTuNEUObIs5x0IzpWbD3CdDMBySQmTRJ92mdNeld7kO=s64",
+            "me": true,
+            "permissionId": "02979968928639156644",
+            "emailAddress": "filidm5795@gmail.com"
+          },
+          "shared": false,
+          "ownedByMe": true,
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
             },
-            "chat": {
-              "id": 104350862,
-              "first_name": "Filippo",
-              "last_name": "Di Marco",
-              "username": "HershelLayton95",
-              "type": "private"
-            },
-            "date": 1758963653,
-            "forward_origin": {
-              "type": "user",
-              "sender_user": {
-                "id": 104350862,
-                "is_bot": false,
-                "first_name": "Filippo",
-                "last_name": "Di Marco",
-                "username": "HershelLayton95",
-                "language_code": "it"
-              },
-              "date": 1758886609
-            },
-            "forward_from": {
-              "id": 104350862,
-              "is_bot": false,
-              "first_name": "Filippo",
-              "last_name": "Di Marco",
-              "username": "HershelLayton95",
-              "language_code": "it"
-            },
-            "forward_date": 1758886609,
-            "document": {
-              "file_name": "DevOps - Introduction.pdf",
-              "mime_type": "application/pdf",
-              "file_id": "BQACAgQAAxkBAAM6aNZ60e3sBom3Fb6SX7BX2VqbDoMAApAZAAKM27BSExNFtep2knY2BA",
-              "file_unique_id": "AgADkBkAAozbsFI",
-              "file_size": 4076093
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
             }
           },
-          "fileName": "/tmp/DevOps - Introduction.pdf",
-          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
-        }
-      }
-    ],
-    "Crypto1": [
-      {
-        "json": {
-          "id": "1Qg1hhqxb-W20qTfLAu6CQQ1syBc-3uz3",
-          "name": "DevOps - Introduction.pdf",
-          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
-        }
-      }
-    ],
-    "Code in JavaScript1": [
-      {
-        "json": {
-          "filename": "DevOps - Introduction.pdf",
-          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
-        }
-      }
-    ],
-    "Code in JavaScript": [
-      {
-        "json": {
-          "filename": "DevOps - Introduction.pdf",
-          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "02979968928639156644",
+              "type": "user",
+              "emailAddress": "filidm5795@gmail.com",
+              "role": "owner",
+              "displayName": "filidm5795",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "permissionIds": [
+            "02979968928639156644"
+          ],
+          "originalFilename": "boarding-pass (3).pdf",
+          "fullFileExtension": "pdf",
+          "fileExtension": "pdf",
+          "md5Checksum": "b4757746d789f09f442112cc6f9117fd",
+          "sha1Checksum": "9db28ac1cc77cc7333ebd8cdfecb778adf3a050f",
+          "sha256Checksum": "10a24dfe09a360973b3fdcdb0355f51ff59eab3523b4b6f7195e41a058c40836",
+          "size": "386540",
+          "quotaBytesUsed": "386540",
+          "headRevisionId": "0B48Tj5YgRJ9aNEhuMDdLb0J0bWtPdG1ENXBVVWljQllMNHNRPQ",
+          "isAppAuthorized": true,
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "inheritedPermissionsDisabled": false
         }
       }
     ]
   },
-  "versionId": "5b3d027f-99f7-434d-8ce2-35654ae445ff",
+  "versionId": "185dc090-008b-4f0b-8910-e06471240d6c",
   "triggerCount": 1,
   "tags": [],
   "shared": [
     {
-      "createdAt": "2025-09-26T14:50:35.529Z",
-      "updatedAt": "2025-09-26T14:50:35.529Z",
+      "createdAt": "2025-09-27T13:57:29.726Z",
+      "updatedAt": "2025-09-27T13:57:29.726Z",
       "role": "workflow:owner",
       "workflowId": "kZwSrIlr0FBcFuVw",
-      "projectId": "Q3WsmESBGYiAe8Wi",
+      "projectId": "G6CtU2rrwzyFRW0C",
       "project": {
-        "createdAt": "2025-09-26T14:38:44.445Z",
-        "updatedAt": "2025-09-26T14:42:02.032Z",
-        "id": "Q3WsmESBGYiAe8Wi",
+        "createdAt": "2025-09-27T13:57:27.503Z",
+        "updatedAt": "2025-09-27T14:15:16.505Z",
+        "id": "G6CtU2rrwzyFRW0C",
         "name": "Filippo Di Marco <filidm5795@gmail.com>",
         "type": "personal",
         "icon": null,
