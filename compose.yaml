@@ -53,7 +53,7 @@ x-init-ollama: &init-ollama
     - OLLAMA_HOST=ollama:11434
   command:
     - "-c"
-    - "sleep 3; ollama pull llama3.1; ollama pull nomic-embed-text"
+    - "sleep 3; ollama run gemma3:4b; ollama pull embeddinggemma; ollama pull gemma3:12b"
 
 services:
   postgres:

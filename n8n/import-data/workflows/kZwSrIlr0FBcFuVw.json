@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T15:57:40.682Z",
+  "updatedAt": "2025-09-27T20:15:23.384Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
   "active": false,
@@ -413,77 +413,12 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1888,
+        1840,
         416
       ],
       "id": "af3e7ce5-8994-4a62-9199-b2c59acab419",
       "name": "Wait",
       "webhookId": "4f8ce6b0-f70a-4fd2-a7e6-bb8ddfa2656b"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
-          "mode": "id"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Foglio1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "pages": "={{ $json.index }}",
-            "markdown": "={{ $json.markdown }}"
-          },
-          "matchingColumns": [
-            "pages"
-          ],
-          "schema": [
-            {
-              "id": "pages",
-              "displayName": "pages",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "markdown",
-              "displayName": "markdown",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        1552,
-        416
-      ],
-      "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "NxWaDBIk7Np1fizK",
-          "name": "Google Sheets account"
-        }
-      }
     },
     {
       "parameters": {
@@ -512,6 +447,204 @@
       ],
       "id": "c2ab869c-de5b-4091-9dd1-1febed13d6d7",
       "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "text": "=Messaggio:\n{{ $('Telegram Trigger').item.json.message.caption }}\nLocandina:\n{{ $json.stdout }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "[\n  {\n    \"output\": {\n      \"titolo\": \"Evento Informativo Benessere e Sonno\",\n      \"data\": \"01/10/2025\",\n      \"ora\": \"20:15\",\n      \"dove\": \"Sala Associazione, Via Matteotti, 7, Gornate Olona\",\n      \"descrizione\": \"La ditta Ondatheraphy terrà un evento informativo sul benessere del sonno e i materassi, donando 340€ all'associazione Osteoarc per le sue attività.  Sarà offerto un ricco buffet e un omaggio alle coppie partecipanti (fino a 3 persone non in coppia, dai 30 ai 75 anni).  Si richiede puntualità e l'assenza di bambini.\"\n    }\n  }\n]",
+        "options": {
+          "systemPromptTemplate": "You are an expert in effective communication and event description. Your role is to write clear, precise, and impactful event description, avoiding unnecessary words or ambiguity. Always focus on brevity, clarity, and accuracy, ensuring your explanations are professional, direct, and easy to understand.\nThe \"descrizione\" must be in Italian lang. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        1600,
+        48
+      ],
+      "id": "74665ce4-f658-40fc-8e76-04d4c13f937e",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "model": "gemma3:12b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        208
+      ],
+      "id": "273ac9bc-7e23-4773-9150-6ced3202a67a",
+      "name": "Ollama Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "=echo \"{{ $json.markdown }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tr -d '\\n' \\\n| tee /tmp/summarize.txt"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        416
+      ],
+      "id": "4b86b006-b93f-4fa3-ba1e-6fe60a539b69",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "command": "=cat /tmp/summarize.txt"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        48
+      ],
+      "id": "353cd276-0c0e-49d2-aa84-e03e1217ffc2",
+      "name": "Execute Command2"
+    },
+    {
+      "parameters": {
+        "command": "=rm /tmp/summarize.txt"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        48
+      ],
+      "id": "6fbfc9df-5292-4178-babb-7a34aaeacc77",
+      "name": "Execute Command3"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "descrizione": "={{ $json.output[0].output.descrizione }}",
+            "dove": "={{ $json.output[0].output.dove }}",
+            "ora": "={{ $json.output[0].output.ora }}",
+            "data": "={{ $json.output[0].output.data }}",
+            "titolo": "={{ $json.output[0].output.titolo }}",
+            "id_file": "={{ $('Edit Fields').item.json.id }}",
+            "id": "={{ $('Edit Fields').item.json.sha256Checksum }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "titolo",
+              "displayName": "titolo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ora",
+              "displayName": "ora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "dove",
+              "displayName": "dove",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "descrizione",
+              "displayName": "descrizione",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_file",
+              "displayName": "id_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1872,
+        48
+      ],
+      "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "connections": {
@@ -733,17 +866,6 @@
         ]
       ]
     },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Split Out": {
       "main": [
         [
@@ -757,10 +879,71 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
         [
           {
-            "node": "Append row in sheet",
+            "node": "Execute Command2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command2": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
             "type": "main",
             "index": 0
           }
@@ -775,137 +958,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Upload file": [
-      {
-        "json": {
-          "kind": "drive#file",
-          "id": "1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB",
-          "name": "boarding-pass (3).pdf",
-          "mimeType": "application/pdf",
-          "starred": false,
-          "trashed": false,
-          "explicitlyTrashed": false,
-          "parents": [
-            "1JasKxZmeWERdFwsj1zAsbxdqniYjX7Ax"
-          ],
-          "spaces": [
-            "drive"
-          ],
-          "version": "2",
-          "webContentLink": "https://drive.google.com/uc?id=1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB&export=download",
-          "webViewLink": "https://drive.google.com/file/d/1j0JssZQJFQUjTODHZleR5YzYBBmtzkqB/view?usp=drivesdk",
-          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/pdf",
-          "hasThumbnail": false,
-          "thumbnailVersion": "0",
-          "viewedByMe": false,
-          "createdTime": "2025-09-27T15:40:25.449Z",
-          "modifiedTime": "2025-09-27T15:40:26.448Z",
-          "modifiedByMeTime": "2025-09-27T15:40:26.448Z",
-          "modifiedByMe": true,
-          "owners": [
-            {
-              "kind": "drive#user",
-              "displayName": "Filippo Di Marco",
-              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocKLJy7q7TTuNEUObIs5x0IzpWbD3CdDMBySQmTRJ92mdNeld7kO=s64",
-              "me": true,
-              "permissionId": "02979968928639156644",
-              "emailAddress": "filidm5795@gmail.com"
-            }
-          ],
-          "lastModifyingUser": {
-            "kind": "drive#user",
-            "displayName": "Filippo Di Marco",
-            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocKLJy7q7TTuNEUObIs5x0IzpWbD3CdDMBySQmTRJ92mdNeld7kO=s64",
-            "me": true,
-            "permissionId": "02979968928639156644",
-            "emailAddress": "filidm5795@gmail.com"
-          },
-          "shared": false,
-          "ownedByMe": true,
-          "downloadRestrictions": {
-            "itemDownloadRestriction": {
-              "restrictedForReaders": false,
-              "restrictedForWriters": false
-            },
-            "effectiveDownloadRestrictionWithContext": {
-              "restrictedForReaders": false,
-              "restrictedForWriters": false
-            }
-          },
-          "capabilities": {
-            "canAcceptOwnership": false,
-            "canAddChildren": false,
-            "canAddMyDriveParent": false,
-            "canChangeCopyRequiresWriterPermission": true,
-            "canChangeItemDownloadRestriction": true,
-            "canChangeSecurityUpdateEnabled": false,
-            "canChangeViewersCanCopyContent": true,
-            "canComment": true,
-            "canCopy": true,
-            "canDelete": true,
-            "canDisableInheritedPermissions": false,
-            "canDownload": true,
-            "canEdit": true,
-            "canEnableInheritedPermissions": true,
-            "canListChildren": false,
-            "canModifyContent": true,
-            "canModifyContentRestriction": true,
-            "canModifyEditorContentRestriction": true,
-            "canModifyOwnerContentRestriction": true,
-            "canModifyLabels": false,
-            "canMoveChildrenWithinDrive": false,
-            "canMoveItemIntoTeamDrive": true,
-            "canMoveItemOutOfDrive": true,
-            "canMoveItemWithinDrive": true,
-            "canReadLabels": false,
-            "canReadRevisions": true,
-            "canRemoveChildren": false,
-            "canRemoveContentRestriction": false,
-            "canRemoveMyDriveParent": true,
-            "canRename": true,
-            "canShare": true,
-            "canTrash": true,
-            "canUntrash": true
-          },
-          "viewersCanCopyContent": true,
-          "copyRequiresWriterPermission": false,
-          "writersCanShare": true,
-          "permissions": [
-            {
-              "kind": "drive#permission",
-              "id": "02979968928639156644",
-              "type": "user",
-              "emailAddress": "filidm5795@gmail.com",
-              "role": "owner",
-              "displayName": "filidm5795",
-              "deleted": false,
-              "pendingOwner": false
-            }
-          ],
-          "permissionIds": [
-            "02979968928639156644"
-          ],
-          "originalFilename": "boarding-pass (3).pdf",
-          "fullFileExtension": "pdf",
-          "fileExtension": "pdf",
-          "md5Checksum": "b4757746d789f09f442112cc6f9117fd",
-          "sha1Checksum": "9db28ac1cc77cc7333ebd8cdfecb778adf3a050f",
-          "sha256Checksum": "10a24dfe09a360973b3fdcdb0355f51ff59eab3523b4b6f7195e41a058c40836",
-          "size": "386540",
-          "quotaBytesUsed": "386540",
-          "headRevisionId": "0B48Tj5YgRJ9aNEhuMDdLb0J0bWtPdG1ENXBVVWljQllMNHNRPQ",
-          "isAppAuthorized": true,
-          "linkShareMetadata": {
-            "securityUpdateEligible": false,
-            "securityUpdateEnabled": true
-          },
-          "inheritedPermissionsDisabled": false
-        }
-      }
-    ]
-  },
-  "versionId": "185dc090-008b-4f0b-8910-e06471240d6c",
+  "pinData": {},
+  "versionId": "d84d36a4-77c8-4822-98f9-3189cfc5e09b",
   "triggerCount": 1,
   "tags": [],
   "shared": [
