@@ -1,0 +1,503 @@
+{
+  "createdAt": "2025-09-26T14:50:35.529Z",
+  "updatedAt": "2025-09-27T09:12:44.477Z",
+  "id": "kZwSrIlr0FBcFuVw",
+  "name": "test_n8n",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": true,
+          "chatIds": "104350862"
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -528,
+        -48
+      ],
+      "id": "c10c94d0-141c-464d-a338-86af4b1c6157",
+      "name": "Telegram Trigger",
+      "webhookId": "6640a14b-5697-4a23-9d4f-7c2af443d0df",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "binaryData": true,
+        "dataPropertyName": "=sha256_checksum"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        16,
+        48
+      ],
+      "id": "8436ffca-efbc-4e63-9e40-5aea11e75c1c",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.message.document.file_name }}",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "=1vP9WAtBLkoPHHgp8E7L_LftpVqmFlAo5",
+            "mode": "id"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        -144
+      ],
+      "id": "e048d74d-ae40-4d40-bdd2-9cb0fa1cb9d9",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/{{ $json.message.document.file_name }}",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        48
+      ],
+      "id": "2e3888d9-fc1e-4386-a7af-cfb618d0dbd4",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        -144
+      ],
+      "id": "3a72c8e1-5b18-4d28-86cf-81ec27bc9273",
+      "name": "Download file",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "binaryData": true,
+        "dataPropertyName": "=sha256_checksum"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        16,
+        -144
+      ],
+      "id": "6f7ad674-f253-4819-965e-5739434b50db",
+      "name": "Crypto1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "sha256_checksum",
+              "field2": "sha256_checksum"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        -80
+      ],
+      "id": "6e5b139b-0b51-4133-a598-7ac3ef37b56b",
+      "name": "Compare Datasets"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { \n    filename: $input.first().json.name,\n    sha256_checksum: $input.first().json.sha256_checksum\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -144
+      ],
+      "id": "212f0c27-c9e2-4825-b0b3-abf05a2cfe4a",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { \n    filename: $input.first().json.message.document.file_name,\n    sha256_checksum: $input.first().json.sha256_checksum\n  }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        48
+      ],
+      "id": "0ec58c44-534d-4fe2-bb3d-9131509e8b7d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "fileSelector": "=/tmp/{{ $json.filename }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        592,
+        48
+      ],
+      "id": "39e9b881-9b50-45b7-815c-5af89418e742",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "=1vP9WAtBLkoPHHgp8E7L_LftpVqmFlAo5",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        736,
+        48
+      ],
+      "id": "6b2ae995-14af-4781-ac48-7c0083acc71d",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "rm \"/tmp/DevOps - Introduction.pdf\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -64
+      ],
+      "id": "03688d73-e45f-4a5b-aaaa-37eb7ced57a4",
+      "name": "Execute Command"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Crypto1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Search files and folders": [
+      {
+        "json": {
+          "id": "1Qg1hhqxb-W20qTfLAu6CQQ1syBc-3uz3",
+          "name": "DevOps - Introduction.pdf"
+        }
+      }
+    ],
+    "Crypto": [
+      {
+        "json": {
+          "update_id": 97696520,
+          "message": {
+            "message_id": 69,
+            "from": {
+              "id": 104350862,
+              "is_bot": false,
+              "first_name": "Filippo",
+              "last_name": "Di Marco",
+              "username": "HershelLayton95",
+              "language_code": "it"
+            },
+            "chat": {
+              "id": 104350862,
+              "first_name": "Filippo",
+              "last_name": "Di Marco",
+              "username": "HershelLayton95",
+              "type": "private"
+            },
+            "date": 1758963653,
+            "forward_origin": {
+              "type": "user",
+              "sender_user": {
+                "id": 104350862,
+                "is_bot": false,
+                "first_name": "Filippo",
+                "last_name": "Di Marco",
+                "username": "HershelLayton95",
+                "language_code": "it"
+              },
+              "date": 1758886609
+            },
+            "forward_from": {
+              "id": 104350862,
+              "is_bot": false,
+              "first_name": "Filippo",
+              "last_name": "Di Marco",
+              "username": "HershelLayton95",
+              "language_code": "it"
+            },
+            "forward_date": 1758886609,
+            "document": {
+              "file_name": "DevOps - Introduction.pdf",
+              "mime_type": "application/pdf",
+              "file_id": "BQACAgQAAxkBAAM6aNZ60e3sBom3Fb6SX7BX2VqbDoMAApAZAAKM27BSExNFtep2knY2BA",
+              "file_unique_id": "AgADkBkAAozbsFI",
+              "file_size": 4076093
+            }
+          },
+          "fileName": "/tmp/DevOps - Introduction.pdf",
+          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
+        }
+      }
+    ],
+    "Crypto1": [
+      {
+        "json": {
+          "id": "1Qg1hhqxb-W20qTfLAu6CQQ1syBc-3uz3",
+          "name": "DevOps - Introduction.pdf",
+          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
+        }
+      }
+    ],
+    "Code in JavaScript1": [
+      {
+        "json": {
+          "filename": "DevOps - Introduction.pdf",
+          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
+        }
+      }
+    ],
+    "Code in JavaScript": [
+      {
+        "json": {
+          "filename": "DevOps - Introduction.pdf",
+          "sha256_checksum": "ebdb811d936408bfd709fc18e220af31bd4009bb6012a0a35653bddcf25282e5"
+        }
+      }
+    ]
+  },
+  "versionId": "5b3d027f-99f7-434d-8ce2-35654ae445ff",
+  "triggerCount": 1,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-09-26T14:50:35.529Z",
+      "updatedAt": "2025-09-26T14:50:35.529Z",
+      "role": "workflow:owner",
+      "workflowId": "kZwSrIlr0FBcFuVw",
+      "projectId": "Q3WsmESBGYiAe8Wi",
+      "project": {
+        "createdAt": "2025-09-26T14:38:44.445Z",
+        "updatedAt": "2025-09-26T14:42:02.032Z",
+        "id": "Q3WsmESBGYiAe8Wi",
+        "name": "Filippo Di Marco <filidm5795@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+tunnel: ${TUNNEL_UUID}
+credentials-file: /etc/cloudflared/${TUNNEL_UUID}.json
+
+ingress:
+  - hostname: ${N8N_HOST} 
+    service: http://n8n:5678
+  - service: http_status:404
