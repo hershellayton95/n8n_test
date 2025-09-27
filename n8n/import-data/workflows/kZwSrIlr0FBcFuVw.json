@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T20:15:23.384Z",
+  "updatedAt": "2025-09-27T21:42:21.526Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -13,7 +13,8 @@
         ],
         "additionalFields": {
           "download": true,
-          "chatIds": "104350862"
+          "chatIds": "104350862",
+          "userIds": "104350862"
         }
       },
       "type": "n8n-nodes-base.telegramTrigger",
@@ -41,7 +42,7 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        16,
+        336,
         48
       ],
       "id": "8436ffca-efbc-4e63-9e40-5aea11e75c1c",
@@ -64,7 +65,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -304,
+        112,
         -144
       ],
       "id": "e048d74d-ae40-4d40-bdd2-9cb0fa1cb9d9",
@@ -81,7 +82,7 @@
     {
       "parameters": {
         "operation": "write",
-        "fileName": "=/tmp/{{ $json.message.document.file_name }}",
+        "fileName": "=/tmp/{{ $json.update_id }}_{{ $binary.data.fileName }}",
         "options": {
           "append": false
         }
@@ -89,7 +90,7 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        -144,
+        96,
         48
       ],
       "id": "2e3888d9-fc1e-4386-a7af-cfb618d0dbd4",
@@ -108,7 +109,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -144,
+        272,
         -144
       ],
       "id": "3a72c8e1-5b18-4d28-86cf-81ec27bc9273",
@@ -131,7 +132,7 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        16,
+        432,
         -144
       ],
       "id": "6f7ad674-f253-4819-965e-5739434b50db",
@@ -153,7 +154,7 @@
       "type": "n8n-nodes-base.compareDatasets",
       "typeVersion": 2.3,
       "position": [
-        368,
+        784,
         -80
       ],
       "id": "6e5b139b-0b51-4133-a598-7ac3ef37b56b",
@@ -166,7 +167,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        176,
+        592,
         -144
       ],
       "id": "212f0c27-c9e2-4825-b0b3-abf05a2cfe4a",
@@ -175,26 +176,13 @@
     },
     {
       "parameters": {
-        "jsCode": "return [\n  { \n    filename: $input.first().json.message.document.file_name,\n    sha256_checksum: $input.first().json.sha256_checksum\n  }\n]"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        176,
-        48
-      ],
-      "id": "0ec58c44-534d-4fe2-bb3d-9131509e8b7d",
-      "name": "Code in JavaScript1"
-    },
-    {
-      "parameters": {
-        "fileSelector": "=/tmp/{{ $json.filename }}",
+        "fileSelector": "={{ $json.fileName }}",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        608,
+        1024,
         0
       ],
       "id": "39e9b881-9b50-45b7-815c-5af89418e742",
@@ -202,7 +190,7 @@
     },
     {
       "parameters": {
-        "name": "={{ $json.fileName }}",
+        "name": "={{ $('Information Extractor').item.json.output[0].output.titolo.replaceAll(' ','_').replaceAll(':','').replaceSpecialChars() }}.{{ $binary.data.fileExtension }}",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -218,49 +206,11 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        736,
-        0
+        2448,
+        48
       ],
       "id": "6b2ae995-14af-4781-ac48-7c0083acc71d",
       "name": "Upload file",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JqSzUPdshsottef3",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "command": "=[ -f \"/tmp/{{ $json.filename }}\" ] && rm \"/tmp/{{ $json.filename }}\"  && echo \"File  \\\"/tmp/{{ $json.filename }}\\\" eliminato.\" || echo \"Il file \\\"/tmp/{{ $json.filename }}\\\"  non esiste.\""
-      },
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        928,
-        -64
-      ],
-      "id": "03688d73-e45f-4a5b-aaaa-37eb7ced57a4",
-      "name": "Execute Command"
-    },
-    {
-      "parameters": {
-        "operation": "download",
-        "fileId": {
-          "__rl": true,
-          "value": "={{ $json.id }}",
-          "mode": "id"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        928,
-        80
-      ],
-      "id": "2c77d3b5-714d-4358-9430-aeafb293ce15",
-      "name": "Download file1",
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "JqSzUPdshsottef3",
@@ -298,8 +248,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1120,
-        80
+        1232,
+        0
       ],
       "id": "49d6221d-60a5-496b-9039-6c26897bd0b0",
       "name": "Edit Fields"
@@ -364,7 +314,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        528,
+        944,
         384
       ],
       "id": "bf1d4bc8-4aaa-415a-8bba-03ca5a2f32e0",
@@ -377,7 +327,7 @@
       "type": "n8n-nodes-base.mistralAi",
       "typeVersion": 1,
       "position": [
-        752,
+        1168,
         480
       ],
       "id": "330d55ea-bfcc-43c8-8281-069f7ea18f88",
@@ -391,12 +341,13 @@
     },
     {
       "parameters": {
+        "documentType": "image_url",
         "options": {}
       },
       "type": "n8n-nodes-base.mistralAi",
       "typeVersion": 1,
       "position": [
-        752,
+        1168,
         288
       ],
       "id": "1fd77592-19fa-46c9-93df-cedb0623c2c8",
@@ -413,7 +364,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1840,
+        2256,
         416
       ],
       "id": "af3e7ce5-8994-4a62-9199-b2c59acab419",
@@ -428,7 +379,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1056,
+        1472,
         400
       ],
       "id": "fd8a2413-192d-4b52-8640-a399b8a63165",
@@ -442,7 +393,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1264,
+        1680,
         400
       ],
       "id": "c2ab869c-de5b-4091-9dd1-1febed13d6d7",
@@ -452,15 +403,15 @@
       "parameters": {
         "text": "=Messaggio:\n{{ $('Telegram Trigger').item.json.message.caption }}\nLocandina:\n{{ $json.stdout }}",
         "schemaType": "fromJson",
-        "jsonSchemaExample": "[\n  {\n    \"output\": {\n      \"titolo\": \"Evento Informativo Benessere e Sonno\",\n      \"data\": \"01/10/2025\",\n      \"ora\": \"20:15\",\n      \"dove\": \"Sala Associazione, Via Matteotti, 7, Gornate Olona\",\n      \"descrizione\": \"La ditta Ondatheraphy terrà un evento informativo sul benessere del sonno e i materassi, donando 340€ all'associazione Osteoarc per le sue attività.  Sarà offerto un ricco buffet e un omaggio alle coppie partecipanti (fino a 3 persone non in coppia, dai 30 ai 75 anni).  Si richiede puntualità e l'assenza di bambini.\"\n    }\n  }\n]",
+        "jsonSchemaExample": "[\n  {\n    \"output\": {\n      \"titolo\": \"Evento Informativo Benessere e Sonno\",\n      \"data\": \"01/10/2025\",\n      \"ora\": \"20:15\",\n      \"dove\": \"Sala Associazione, Via Matteotti, 7, Gornate Olona\",\n      \"descrizione\": \"La ditta Ondatheraphy terrà un evento informativo sul benessere del sonno e i materassi, donando 340€ all'associazione Osteoarc per le sue attività.  Sarà offerto un ricco buffet e un omaggio alle coppie partecipanti (fino a 3 persone non in coppia, dai 30 ai 75 anni).  Si richiede puntualità e l'assenza di bambini.\",\n    \"contatto\": \"segreteria@osteoarc.it | 339 6392152\"\n    }\n  }\n]",
         "options": {
-          "systemPromptTemplate": "You are an expert in effective communication and event description. Your role is to write clear, precise, and impactful event description, avoiding unnecessary words or ambiguity. Always focus on brevity, clarity, and accuracy, ensuring your explanations are professional, direct, and easy to understand.\nThe \"descrizione\" must be in Italian lang. "
+          "systemPromptTemplate": "You are an expert in effective communication and event description. Your role is to write clear, precise, and impactful event description, avoiding unnecessary words or ambiguity. Always focus on brevity, clarity, and accuracy, ensuring your explanations are professional, direct, and easy to understand.\nThe \"descrizione\" must be in Italian lang.\nAdd in the \"contato key\" this value: \"segreteria@osteoarc.it | 339 6392152\""
         }
       },
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        1600,
+        2016,
         48
       ],
       "id": "74665ce4-f658-40fc-8e76-04d4c13f937e",
@@ -474,7 +425,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmOllama",
       "typeVersion": 1,
       "position": [
-        1584,
+        2000,
         208
       ],
       "id": "273ac9bc-7e23-4773-9150-6ced3202a67a",
@@ -488,12 +439,12 @@
     },
     {
       "parameters": {
-        "command": "=echo \"{{ $json.markdown }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tr -d '\\n' \\\n| tee /tmp/summarize.txt"
+        "command": "=echo \"{{ $json.markdown }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tr '\\n' ' '\\\n| tee /tmp/summarize.txt"
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        1552,
+        1968,
         416
       ],
       "id": "4b86b006-b93f-4fa3-ba1e-6fe60a539b69",
@@ -506,7 +457,7 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        1456,
+        1872,
         48
       ],
       "id": "353cd276-0c0e-49d2-aa84-e03e1217ffc2",
@@ -514,16 +465,18 @@
     },
     {
       "parameters": {
-        "command": "=rm /tmp/summarize.txt"
+        "command": "=rm /tmp/*.*"
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        2032,
-        48
+        3296,
+        -208
       ],
       "id": "6fbfc9df-5292-4178-babb-7a34aaeacc77",
-      "name": "Execute Command3"
+      "name": "Execute Command3",
+      "alwaysOutputData": false,
+      "retryOnFail": false
     },
     {
       "parameters": {
@@ -543,13 +496,14 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "descrizione": "={{ $json.output[0].output.descrizione }}",
-            "dove": "={{ $json.output[0].output.dove }}",
-            "ora": "={{ $json.output[0].output.ora }}",
-            "data": "={{ $json.output[0].output.data }}",
-            "titolo": "={{ $json.output[0].output.titolo }}",
-            "id_file": "={{ $('Edit Fields').item.json.id }}",
-            "id": "={{ $('Edit Fields').item.json.sha256Checksum }}"
+            "descrizione": "={{ $('Information Extractor').item.json.output[0].output.descrizione }}",
+            "dove": "={{ $('Information Extractor').item.json.output[0].output.dove }}",
+            "ora": "={{ $('Information Extractor').item.json.output[0].output.ora }}",
+            "data": "={{ $('Information Extractor').item.json.output[0].output.data }}",
+            "titolo": "={{ $('Information Extractor').item.json.output[0].output.titolo }}",
+            "id_file": "={{ $json.id }}",
+            "id": "={{ $json.sha256Checksum }}",
+            "contatto": "={{ $('Information Extractor').item.json.output[0].output.contatto }}"
           },
           "matchingColumns": [
             "id"
@@ -616,6 +570,16 @@
               "removed": false
             },
             {
+              "id": "contatto",
+              "displayName": "contatto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
               "id": "id_file",
               "displayName": "id_file",
               "required": false,
@@ -634,7 +598,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1872,
+        2592,
         48
       ],
       "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
@@ -645,6 +609,83 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Append or update row in sheet').item.json.id_file }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2752,
+        48
+      ],
+      "id": "2a363b90-c22a-42e2-a543-257eff87f82a",
+      "name": "Download file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "=104350862",
+        "binaryData": true,
+        "additionalFields": {
+          "caption": "={{ $('Append or update row in sheet').item.json.descrizione }}\ncontattare: {{ $('Append or update row in sheet').item.json.contatto }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2960,
+        48
+      ],
+      "id": "fdc556fb-4e49-41ab-bce3-9bcc318278de",
+      "name": "Send a document",
+      "webhookId": "1595c6b3-e6f5-4b5e-99ea-41644cccc3d1",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        48
+      ],
+      "id": "0ec58c44-534d-4fe2-bb3d-9131509e8b7d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Compare Datasets').item.json.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        48
+      ],
+      "id": "a6b87f71-1400-45d0-a3a7-33e263ef26c2",
+      "name": "Read/Write Files from Disk3"
     }
   ],
   "connections": {
@@ -652,12 +693,12 @@
       "main": [
         [
           {
-            "node": "Read/Write Files from Disk",
+            "node": "Search files and folders",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Search files and folders",
+            "node": "Read/Write Files from Disk",
             "type": "main",
             "index": 0
           }
@@ -730,23 +771,12 @@
         ]
       ]
     },
-    "Code in JavaScript1": {
-      "main": [
-        [
-          {
-            "node": "Compare Datasets",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
     "Compare Datasets": {
       "main": [
         [],
         [
           {
-            "node": "Execute Command",
+            "node": "Execute Command3",
             "type": "main",
             "index": 0
           }
@@ -765,7 +795,7 @@
       "main": [
         [
           {
-            "node": "Upload file",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -776,28 +806,7 @@
       "main": [
         [
           {
-            "node": "Execute Command",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Download file1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Execute Command": {
-      "main": [
-        []
-      ]
-    },
-    "Download file1": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
+            "node": "Append or update row in sheet",
             "type": "main",
             "index": 0
           }
@@ -899,7 +908,7 @@
       "main": [
         [
           {
-            "node": "Append or update row in sheet",
+            "node": "Read/Write Files from Disk3",
             "type": "main",
             "index": 0
           }
@@ -943,7 +952,56 @@
       "main": [
         [
           {
+            "node": "Download file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command3": {
+      "main": [
+        []
+      ]
+    },
+    "Download file2": {
+      "main": [
+        [
+          {
+            "node": "Send a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send a document": {
+      "main": [
+        [
+          {
             "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
             "type": "main",
             "index": 0
           }
@@ -958,8 +1016,63 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "d84d36a4-77c8-4822-98f9-3189cfc5e09b",
+  "pinData": {
+    "Information Extractor": [
+      {
+        "json": {
+          "output": [
+            {
+              "output": {
+                "titolo": "Serata Informativa: Benessere del Sonno e Materassi",
+                "data": "01/10/2025",
+                "ora": "20:15 - 22:30",
+                "dove": "SALA ASSOCIAZIONE, VIA MATTEOTTI, 7, Gornate-Olona",
+                "descrizione": "Serata informativa sulla prevenzione e salute, curata da un promotore ONDA therapy in collaborazione con OSTEOARC APS. Relazione sul benessere del sonno e materassi. Seguirà buffet e estrazione di premi. Richiesta la presenza di coppie coniugate o conviventi dai 30 ai 75 anni.",
+                "contatto": "segreteria@osteoarc.it | 339 6392152"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "Extract text PDF": [
+      {
+        "json": {
+          "pages": [
+            {
+              "index": 0,
+              "markdown": "![img-0.jpeg](img-0.jpeg)\n\nSiete invitati ad un'interessante serata di informazione sul tema **\"PREVENZIONE e SALUTE\"** curata da un promotore ONDA therapy in collaborazione con:\n\n## **OSTEOARC APS**\n\nLa manifestazione avrà luogo il giorno **01 / 10 / 2025** alle ore **20:15**\n\n- presso: **SALA ASSOCIAZIONE**\n- via: **VIA MATTEOTTI, 7**\n- località: **Gornate-Olona**\n\n## **SI RACCOMANDA LA MASSIMA PUNTUALITÀ!**\n\nAtutte le coppie presenti verrà offerto un simpatico omaggio. A fine serata oltre al piacere di avervi ospiti per un piacevole rinfresco, ci sarà l'estrazione di un premio finale a scelta tra:\n\n- Federa Ondatencel\n- Collare di noccioli di ciliegio\n- Federa Ondawool\n- Sciarpa ONDASTAN\n\n## Importante:\n\nSi richiede la presenza di coppie coniugate o conviventi di età superiore ai 30 anni. Questo permette alla Ns. Associazione di ricevere un utile contributo **ATTIVITÀ DELL'ASSOCIAZIONE**. Ecco perché è così importante la Vostra partecipazione!\n\nNB: Per la buona riuscita della serata è necessario che non ci siano bambini in sala. **La partecipazione alla manifestazione non comporta nessun obbligo da parte Vostra e non seguiranno in nessun caso visite a domicilio.**",
+              "images": [
+                {
+                  "id": "img-0.jpeg",
+                  "top_left_x": 34,
+                  "top_left_y": 37,
+                  "bottom_right_x": 1610,
+                  "bottom_right_y": 856,
+                  "image_base64": null,
+                  "image_annotation": null
+                }
+              ],
+              "dimensions": {
+                "dpi": 200,
+                "height": 2339,
+                "width": 1654
+              }
+            }
+          ],
+          "model": "mistral-ocr-2505-completion",
+          "document_annotation": null,
+          "usage_info": {
+            "pages_processed": 1,
+            "doc_size_bytes": 404255
+          },
+          "extractedText": "![img-0.jpeg](img-0.jpeg)\n\nSiete invitati ad un'interessante serata di informazione sul tema **\"PREVENZIONE e SALUTE\"** curata da un promotore ONDA therapy in collaborazione con:\n\n## **OSTEOARC APS**\n\nLa manifestazione avrà luogo il giorno **01 / 10 / 2025** alle ore **20:15**\n\n- presso: **SALA ASSOCIAZIONE**\n- via: **VIA MATTEOTTI, 7**\n- località: **Gornate-Olona**\n\n## **SI RACCOMANDA LA MASSIMA PUNTUALITÀ!**\n\nAtutte le coppie presenti verrà offerto un simpatico omaggio. A fine serata oltre al piacere di avervi ospiti per un piacevole rinfresco, ci sarà l'estrazione di un premio finale a scelta tra:\n\n- Federa Ondatencel\n- Collare di noccioli di ciliegio\n- Federa Ondawool\n- Sciarpa ONDASTAN\n\n## Importante:\n\nSi richiede la presenza di coppie coniugate o conviventi di età superiore ai 30 anni. Questo permette alla Ns. Associazione di ricevere un utile contributo **ATTIVITÀ DELL'ASSOCIAZIONE**. Ecco perché è così importante la Vostra partecipazione!\n\nNB: Per la buona riuscita della serata è necessario che non ci siano bambini in sala. **La partecipazione alla manifestazione non comporta nessun obbligo da parte Vostra e non seguiranno in nessun caso visite a domicilio.**",
+          "pageCount": 1
+        }
+      }
+    ]
+  },
+  "versionId": "c3bc4885-77b7-495b-b727-7fe1f46a6720",
   "triggerCount": 1,
   "tags": [],
   "shared": [
