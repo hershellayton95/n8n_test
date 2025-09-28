@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-27T21:50:31.847Z",
+  "updatedAt": "2025-09-28T00:11:12.526Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -20,7 +20,7 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -528,
+        -416,
         -48
       ],
       "id": "c10c94d0-141c-464d-a338-86af4b1c6157",
@@ -206,7 +206,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        2448,
+        2640,
         48
       ],
       "id": "6b2ae995-14af-4781-ac48-7c0083acc71d",
@@ -360,11 +360,13 @@
       }
     },
     {
-      "parameters": {},
+      "parameters": {
+        "amount": 2
+      },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2256,
+        2192,
         416
       ],
       "id": "af3e7ce5-8994-4a62-9199-b2c59acab419",
@@ -411,7 +413,7 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        2016,
+        2128,
         48
       ],
       "id": "74665ce4-f658-40fc-8e76-04d4c13f937e",
@@ -425,8 +427,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmOllama",
       "typeVersion": 1,
       "position": [
-        2000,
-        208
+        2080,
+        224
       ],
       "id": "273ac9bc-7e23-4773-9150-6ced3202a67a",
       "name": "Ollama Model",
@@ -439,12 +441,12 @@
     },
     {
       "parameters": {
-        "command": "=echo \"{{ $json.markdown }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tr '\\n' ' '\\\n| tee /tmp/summarize.txt"
+        "command": "=echo \"{{ $json.markdown }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tee -a /tmp/summarize.txt"
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        1968,
+        1936,
         416
       ],
       "id": "4b86b006-b93f-4fa3-ba1e-6fe60a539b69",
@@ -470,8 +472,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        3296,
-        -208
+        3616,
+        -256
       ],
       "id": "6fbfc9df-5292-4178-babb-7a34aaeacc77",
       "name": "Execute Command3",
@@ -503,7 +505,8 @@
             "titolo": "={{ $('Information Extractor').item.json.output[0].output.titolo }}",
             "id_file": "={{ $json.id }}",
             "id": "={{ $json.sha256Checksum }}",
-            "contatto": "={{ $('Information Extractor').item.json.output[0].output.contatto }}"
+            "contatto": "={{ $('Information Extractor').item.json.output[0].output.contatto }}",
+            "titolo_file": "={{ $json.name }}"
           },
           "matchingColumns": [
             "id"
@@ -588,6 +591,16 @@
               "type": "string",
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "titolo_file",
+              "displayName": "titolo_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -598,7 +611,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2592,
+        3184,
         48
       ],
       "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
@@ -607,56 +620,6 @@
         "googleSheetsOAuth2Api": {
           "id": "NxWaDBIk7Np1fizK",
           "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "download",
-        "fileId": {
-          "__rl": true,
-          "value": "={{ $('Append or update row in sheet').item.json.id_file }}",
-          "mode": "id"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        2752,
-        48
-      ],
-      "id": "2a363b90-c22a-42e2-a543-257eff87f82a",
-      "name": "Download file2",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JqSzUPdshsottef3",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "sendDocument",
-        "chatId": "=104350862",
-        "binaryData": true,
-        "additionalFields": {
-          "caption": "=In data {{ $('Append or update row in sheet').item.json.data }}, alle ore {{ $('Append or update row in sheet').item.json.ora }} si terra il seguente evento:\n{{ $('Append or update row in sheet').item.json.descrizione }}\ncontattare: {{ $('Append or update row in sheet').item.json.contatto }}"
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        2960,
-        48
-      ],
-      "id": "fdc556fb-4e49-41ab-bce3-9bcc318278de",
-      "name": "Send a document",
-      "webhookId": "1595c6b3-e6f5-4b5e-99ea-41644cccc3d1",
-      "credentials": {
-        "telegramApi": {
-          "id": "jXDOrBeZepPh1O5z",
-          "name": "Telegram account"
         }
       }
     },
@@ -681,11 +644,300 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        2288,
+        2432,
         48
       ],
       "id": "a6b87f71-1400-45d0-a3a7-33e263ef26c2",
       "name": "Read/Write Files from Disk3"
+    },
+    {
+      "parameters": {
+        "chatId": "=104350862",
+        "text": "File già esistente...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        -240
+      ],
+      "id": "71fc390e-3777-4581-b7d6-c3c822aea502",
+      "name": "Send a text message",
+      "webhookId": "1595c6b3-e6f5-4b5e-99ea-41644cccc3d1",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "1KIrbLMZGMIW0_DFqcgSmSo_ex0XXYCqw",
+          "mode": "list",
+          "cachedResultName": "Osteocinema_Arsenico_e_i_vecchi_merletti.jpg",
+          "cachedResultUrl": "https://drive.google.com/file/d/1KIrbLMZGMIW0_DFqcgSmSo_ex0XXYCqw/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        -704
+      ],
+      "id": "63737652-1325-402e-9389-df46d883b80f",
+      "name": "Delete a file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "1Wwwz3fuNQvc2mf25l-JnJZmrnMaMVALg",
+          "mode": "list",
+          "cachedResultName": "Serata_Informativa_Benessere_del_Sonno_e_Materassi.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1Wwwz3fuNQvc2mf25l-JnJZmrnMaMVALg/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1392,
+        -704
+      ],
+      "id": "8f9a2830-b061-464c-844e-e784840755df",
+      "name": "Delete a file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10646eae-ae46-4327-a4dc-9987c2d76173",
+              "name": "file_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dd0aa081-79e7-4714-8a67-1e898285554c",
+              "name": "folder_id",
+              "value": "={{ $json.parents[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "25271ac6-9cba-4083-a9dd-dd5a52f183fb",
+      "name": "Set File ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "file_id",
+                "value": "={{ $('Clear Old Vectors').item.json.file_id }}"
+              },
+              {
+                "name": "folder_id",
+                "value": "={{ $('Clear Old Vectors').item.json.folder_id }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "f0c3c844-e5e7-467d-af4d-feaf57146b78",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        4432,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 100,
+        "options": {}
+      },
+      "id": "41e7408d-62e3-45f3-9de9-7b33a4fec7a7",
+      "name": "Recursive Character Text Splitter1",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        4416,
+        848
+      ]
+    },
+    {
+      "parameters": {
+        "model": "embeddinggemma:latest"
+      },
+      "id": "aa60e213-b73d-47a2-9c2a-da52351cdd73",
+      "name": "Embeddings Ollama",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        4240,
+        624
+      ],
+      "credentials": {
+        "ollamaApi": {
+          "id": "xHuYe0MDGOs9IpBW",
+          "name": "Local Ollama service"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "collectionConfig": ""
+        }
+      },
+      "id": "f5cb12f8-aebd-44b7-bed9-1c158001ab00",
+      "name": "Qdrant Vector Store Insert",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1,
+      "position": [
+        4176,
+        352
+      ],
+      "credentials": {
+        "qdrantApi": {
+          "id": "sFfERYppMeBnFNeA",
+          "name": "Local QdrantApi database"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "id": "3d450603-0675-4305-88c2-7bbb7658a5b0",
+      "name": "Extract Document Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        352
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "code": {
+          "execute": {
+            "code": "const { QdrantVectorStore } = require(\"@langchain/qdrant\");\nconst { OllamaEmbeddings } = require(\"@langchain/community/embeddings/ollama\");\n\nconst embeddings = new OllamaEmbeddings({\n  model: \"embeddinggemma:latest\",\n  baseUrl: \"http://ollama:11434\"\n});\n\nconst vectorStore = await QdrantVectorStore.fromExistingCollection(\n  embeddings,\n  {\n    url: \"http://qdrant:6333\",\n    collectionName: \"documents\",\n  }\n);\n\nconst fileIdToDelete = this.getInputData()[0].json.file_id;\nconst folderIdToDelete = this.getInputData()[0].json.folder_id;\n\nconst filter = {\n        must: [\n            {\n                key: \"metadata.file_id\",\n                match: {\n                    value: fileIdToDelete,\n                },\n            },\n        ],\n    }\n\n// const results = await vectorStore.similaritySearch(\"this\", 10, filter);\n// const idsToDelete = results.map((doc) => doc.id);\n\n// NOT IMPLEMENTED!\n// await vectorStore.delete({ ids: idsToDelete });\n\nvectorStore.client.delete(\"documents\", {\n  filter\n});\n\nreturn [ {json: { file_id: fileIdToDelete, folder_id: folderIdToDelete } } ];\n"
+          }
+        },
+        "inputs": {
+          "input": [
+            {
+              "type": "main",
+              "required": true
+            }
+          ]
+        },
+        "outputs": {
+          "output": [
+            {
+              "type": "main"
+            }
+          ]
+        }
+      },
+      "id": "97ae1d4b-98d9-43c8-a5e5-b04c4d37a63a",
+      "name": "Clear Old Vectors",
+      "type": "@n8n/n8n-nodes-langchain.code",
+      "typeVersion": 1,
+      "position": [
+        3184,
+        352
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "fileSelector": "=/tmp/summarize.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3744,
+        352
+      ],
+      "id": "2a789746-1c4c-4bb1-896e-f9987298eb08",
+      "name": "Read/Write Files from Disk4"
+    },
+    {
+      "parameters": {
+        "command": "=echo \"{{ $('Telegram Trigger').item.json.message.caption }}\" \\\n| sed -E 's/!\\[.*\\]\\(.*\\)//g; s/\\*\\*//g; s/^#+[ ]*//g; s/^- //g; s/\\\\\"//g' \\\n| sed '/^[[:space:]]*$/d' \\\n| tr -s ' ' \\\n| tee -a /tmp/summarize.txt"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3408,
+        352
+      ],
+      "id": "a14e3ead-7ac8-4423-b161-2e84fb45cca5",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "chatId": "=104350862",
+        "text": "File caricato...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3392,
+        -48
+      ],
+      "id": "8439515e-b36f-45bd-8c6f-cdedc7dc7f0f",
+      "name": "Send a text message1",
+      "webhookId": "1595c6b3-e6f5-4b5e-99ea-41644cccc3d1",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "connections": {
@@ -776,7 +1028,7 @@
         [],
         [
           {
-            "node": "Execute Command3",
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }
@@ -807,6 +1059,11 @@
         [
           {
             "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set File ID",
             "type": "main",
             "index": 0
           }
@@ -952,7 +1209,7 @@
       "main": [
         [
           {
-            "node": "Download file2",
+            "node": "Send a text message1",
             "type": "main",
             "index": 0
           }
@@ -964,17 +1221,6 @@
         []
       ]
     },
-    "Download file2": {
-      "main": [
-        [
-          {
-            "node": "Send a document",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Code in JavaScript1": {
       "main": [
         [
@@ -982,17 +1228,6 @@
             "node": "Compare Datasets",
             "type": "main",
             "index": 1
-          }
-        ]
-      ]
-    },
-    "Send a document": {
-      "main": [
-        [
-          {
-            "node": "Execute Command3",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -1007,6 +1242,127 @@
           }
         ]
       ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a file": {
+      "main": [
+        [
+          {
+            "node": "Delete a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File ID": {
+      "main": [
+        [
+          {
+            "node": "Clear Old Vectors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant Vector Store Insert",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter1": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store Insert",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Document Text": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store Insert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear Old Vectors": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk4": {
+      "main": [
+        [
+          {
+            "node": "Extract Document Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1016,63 +1372,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {
-    "Information Extractor": [
-      {
-        "json": {
-          "output": [
-            {
-              "output": {
-                "titolo": "Serata Informativa: Benessere del Sonno e Materassi",
-                "data": "01/10/2025",
-                "ora": "20:15 - 22:30",
-                "dove": "SALA ASSOCIAZIONE, VIA MATTEOTTI, 7, Gornate-Olona",
-                "descrizione": "Serata informativa sulla prevenzione e salute, curata da un promotore ONDA therapy in collaborazione con OSTEOARC APS. Relazione sul benessere del sonno e materassi. Seguirà buffet e estrazione di premi. Richiesta la presenza di coppie coniugate o conviventi dai 30 ai 75 anni.",
-                "contatto": "segreteria@osteoarc.it | 339 6392152"
-              }
-            }
-          ]
-        }
-      }
-    ],
-    "Extract text PDF": [
-      {
-        "json": {
-          "pages": [
-            {
-              "index": 0,
-              "markdown": "![img-0.jpeg](img-0.jpeg)\n\nSiete invitati ad un'interessante serata di informazione sul tema **\"PREVENZIONE e SALUTE\"** curata da un promotore ONDA therapy in collaborazione con:\n\n## **OSTEOARC APS**\n\nLa manifestazione avrà luogo il giorno **01 / 10 / 2025** alle ore **20:15**\n\n- presso: **SALA ASSOCIAZIONE**\n- via: **VIA MATTEOTTI, 7**\n- località: **Gornate-Olona**\n\n## **SI RACCOMANDA LA MASSIMA PUNTUALITÀ!**\n\nAtutte le coppie presenti verrà offerto un simpatico omaggio. A fine serata oltre al piacere di avervi ospiti per un piacevole rinfresco, ci sarà l'estrazione di un premio finale a scelta tra:\n\n- Federa Ondatencel\n- Collare di noccioli di ciliegio\n- Federa Ondawool\n- Sciarpa ONDASTAN\n\n## Importante:\n\nSi richiede la presenza di coppie coniugate o conviventi di età superiore ai 30 anni. Questo permette alla Ns. Associazione di ricevere un utile contributo **ATTIVITÀ DELL'ASSOCIAZIONE**. Ecco perché è così importante la Vostra partecipazione!\n\nNB: Per la buona riuscita della serata è necessario che non ci siano bambini in sala. **La partecipazione alla manifestazione non comporta nessun obbligo da parte Vostra e non seguiranno in nessun caso visite a domicilio.**",
-              "images": [
-                {
-                  "id": "img-0.jpeg",
-                  "top_left_x": 34,
-                  "top_left_y": 37,
-                  "bottom_right_x": 1610,
-                  "bottom_right_y": 856,
-                  "image_base64": null,
-                  "image_annotation": null
-                }
-              ],
-              "dimensions": {
-                "dpi": 200,
-                "height": 2339,
-                "width": 1654
-              }
-            }
-          ],
-          "model": "mistral-ocr-2505-completion",
-          "document_annotation": null,
-          "usage_info": {
-            "pages_processed": 1,
-            "doc_size_bytes": 404255
-          },
-          "extractedText": "![img-0.jpeg](img-0.jpeg)\n\nSiete invitati ad un'interessante serata di informazione sul tema **\"PREVENZIONE e SALUTE\"** curata da un promotore ONDA therapy in collaborazione con:\n\n## **OSTEOARC APS**\n\nLa manifestazione avrà luogo il giorno **01 / 10 / 2025** alle ore **20:15**\n\n- presso: **SALA ASSOCIAZIONE**\n- via: **VIA MATTEOTTI, 7**\n- località: **Gornate-Olona**\n\n## **SI RACCOMANDA LA MASSIMA PUNTUALITÀ!**\n\nAtutte le coppie presenti verrà offerto un simpatico omaggio. A fine serata oltre al piacere di avervi ospiti per un piacevole rinfresco, ci sarà l'estrazione di un premio finale a scelta tra:\n\n- Federa Ondatencel\n- Collare di noccioli di ciliegio\n- Federa Ondawool\n- Sciarpa ONDASTAN\n\n## Importante:\n\nSi richiede la presenza di coppie coniugate o conviventi di età superiore ai 30 anni. Questo permette alla Ns. Associazione di ricevere un utile contributo **ATTIVITÀ DELL'ASSOCIAZIONE**. Ecco perché è così importante la Vostra partecipazione!\n\nNB: Per la buona riuscita della serata è necessario che non ci siano bambini in sala. **La partecipazione alla manifestazione non comporta nessun obbligo da parte Vostra e non seguiranno in nessun caso visite a domicilio.**",
-          "pageCount": 1
-        }
-      }
-    ]
-  },
-  "versionId": "1faa3b68-6b7c-474e-a98d-c525b160e88c",
+  "pinData": {},
+  "versionId": "2eca96ea-666e-434e-9b7d-efa3ac24613b",
   "triggerCount": 1,
   "tags": [],
   "shared": [
