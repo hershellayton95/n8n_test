@@ -1,38 +1,11 @@
 {
   "createdAt": "2025-09-28T12:32:12.033Z",
-  "updatedAt": "2025-09-28T12:52:01.373Z",
+  "updatedAt": "2025-09-28T23:03:14.821Z",
   "id": "rffKV3Lotzdijf9q",
-  "name": "messaggio_associazione",
+  "name": "Download Telegram File",
   "active": false,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {
-        "updates": [
-          "message"
-        ],
-        "additionalFields": {
-          "download": true,
-          "chatIds": "104350862",
-          "userIds": "104350862"
-        }
-      },
-      "type": "n8n-nodes-base.telegramTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        -416,
-        -32
-      ],
-      "id": "0fb9f764-aad1-4d08-806d-5e961a85fd25",
-      "name": "Telegram Trigger",
-      "webhookId": "50dda5db-ffa9-4e37-aa92-a2e5d875e897",
-      "credentials": {
-        "telegramApi": {
-          "id": "jXDOrBeZepPh1O5z",
-          "name": "Telegram account"
-        }
-      }
-    },
     {
       "parameters": {
         "type": "SHA256",
@@ -42,8 +15,8 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        -16,
-        -32
+        -176,
+        -984
       ],
       "id": "a84f4237-a25b-4331-bac4-55c881f23400",
       "name": "Crypto"
@@ -51,7 +24,7 @@
     {
       "parameters": {
         "operation": "write",
-        "fileName": "=/tmp/{{ $json.update_id }}_{{ $binary.data.fileName }}",
+        "fileName": "=/tmp/{{ $json.result.file_id }}_{{ $binary.data.fileName }}",
         "options": {
           "append": false
         }
@@ -59,8 +32,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        -240,
-        -32
+        -400,
+        -984
       ],
       "id": "00f66620-1d32-4154-9e84-46fd78170725",
       "name": "Read/Write Files from Disk"
@@ -73,15 +46,15 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        928,
-        64
+        1168,
+        -1080
       ],
       "id": "3d2d892d-c61e-429f-9743-f87eb7c6856f",
       "name": "Read/Write Files from Disk1"
     },
     {
       "parameters": {
-        "name": "={{ $('Telegram Trigger').item.json.update_id }}.{{ $binary.data.fileExtension }}",
+        "name": "={{ $binary.data.fileName }}",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -97,8 +70,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        1120,
-        64
+        1392,
+        -1080
       ],
       "id": "886e33f1-a5ca-43b7-a7ad-2b3c363b1be3",
       "name": "Upload file",
@@ -116,8 +89,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        2048,
-        -144
+        2064,
+        -984
       ],
       "id": "50f45353-5733-45b7-b9a1-38af32786363",
       "name": "Execute Command3",
@@ -131,15 +104,357 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        176,
-        -32
+        48,
+        -984
       ],
       "id": "1311025d-619c-464e-96c6-4d328856ff06",
       "name": "Code in JavaScript1"
     },
     {
       "parameters": {
-        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id",
+              "lookupValue": "={{ $json.sha256_checksum }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        -984
+      ],
+      "id": "300deed9-0912-4268-8222-48251aaf2120",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getFile?file_id={{ $json.message.document.file_id }}{{ $json.edited_message.document.file_id }}",
+        "options": {}
+      },
+      "name": "2. Get File Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        -1080
+      ],
+      "id": "f6dd17d6-6cf8-4cd2-909e-4ddfd287f1bb"
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getUpdates",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {}
+          ]
+        }
+      },
+      "name": "1. Get File ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        -912
+      ],
+      "id": "09480172-36cb-42c0-8110-ed1842f4e8e5"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/{{ $json.result.file_path }}",
+        "responseFormat": "file",
+        "options": {}
+      },
+      "name": "2. Get File Path1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        -984
+      ],
+      "id": "07370862-413f-43d0-b7e3-86c20c785c00"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "016a029a-02d9-43c7-adcb-94cd2b5e18e5",
+              "name": "result[1].message.caption",
+              "value": "={{ $('Switch').item.json.message.caption }}{{ $('Switch').item.json.edited_message.caption }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -624,
+        -984
+      ],
+      "id": "a3a0d826-1ecc-4d7d-8850-a2ae19aeca4d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getFile?file_id={{ $json.message.photo[0].file_id }}{{ $json.edited_message.photo[0].file_id }}",
+        "options": {}
+      },
+      "name": "2. Get File Path2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        -840
+      ],
+      "id": "37717101-5a6a-4b6c-8637-ab1e282623f5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.document.file_id }}{{ $json.message_edited.document.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "8f513b71-db74-4435-9617-c13f4005e600"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "document"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1b8d056-8d84-44e6-a301-b9cc727b3c54",
+                    "leftValue": "={{ $json.message.photo[0].file_id }}{{ $json.message_edited.document.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "photo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1296,
+        -984
+      ],
+      "id": "32a38065-8462-4419-b0da-c7cd881d706e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        -912
+      ],
+      "id": "dc25bc37-5dce-4232-80ec-90ef0be9fd0c",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1520,
+        -912
+      ],
+      "id": "ee865402-f871-4ab7-9e59-13a971171728",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2192,
+        -912
+      ],
+      "id": "6a32c46b-3a8b-414c-b1c1-cf59ddcc3537",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2512,
+        -912
+      ],
+      "id": "9cbee3aa-726d-4e1e-8e6c-6c39539ccf36",
+      "name": "Wait",
+      "webhookId": "43a49767-e80a-458f-ab76-3d4d7a924da1"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/sendMessage",
+        "options": {
+          "bodyContentType": "json"
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "chat_id",
+              "value": "104350862"
+            },
+            {
+              "name": "text",
+              "value": "File già presente ..."
+            },
+            {
+              "name": "parse_mode",
+              "value": "markdown"
+            }
+          ]
+        }
+      },
+      "name": "1. Send Message1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        -840
+      ],
+      "id": "53ee609e-c41d-41c6-be7e-6e3111b2a6e3"
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/sendMessage",
+        "options": {
+          "bodyContentType": "json"
+        },
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "chat_id",
+              "value": "104350862"
+            },
+            {
+              "name": "text",
+              "value": "File caricato"
+            },
+            {
+              "name": "parse_mode",
+              "value": "markdown"
+            }
+          ]
+        }
+      },
+      "name": "1. Send Message2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        -1080
+      ],
+      "id": "7bc193ce-5d15-4520-8066-2bda59f4e916"
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getUpdates",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "offset",
+              "value": "={{ $('Loop Over Items').item.json.update_id+1 }}"
+            }
+          ]
+        }
+      },
+      "name": "1. Get File ID1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        -984
+      ],
+      "id": "7bee3bb6-b3d7-4a35-a98f-7bd3e454c722"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
           "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
@@ -157,7 +472,7 @@
           "value": {
             "id_file": "={{ $('Upload file').item.json.id }}",
             "id": "={{ $('Upload file').item.json.sha256Checksum }}",
-            "messaggio": "={{ $('Telegram Trigger').item.json.message.caption }}",
+            "messaggio": "={{ $('Edit Fields').item.json.result['1'].message.caption }}",
             "data": "={{ $json.data.Quando }}",
             "ora": "={{ $json.data.Ora }}"
           },
@@ -224,11 +539,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1488,
-        64
+        1616,
+        -1080
       ],
       "id": "f636502b-eb82-4fe1-9982-5f5b56eeef47",
-      "name": "Append row in sheet",
+      "name": "Append or update row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "NxWaDBIk7Np1fizK",
@@ -238,125 +553,29 @@
     },
     {
       "parameters": {
-        "operation": "sendAndWait",
-        "chatId": "=104350862",
-        "message": "=Clicca su Rispondi o Respond e compila il form",
-        "responseType": "customForm",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "Quando",
-              "fieldType": "date",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Ora",
-              "placeholder": "15:00",
-              "requiredField": true
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1312,
-        64
-      ],
-      "id": "3c145031-d6a3-4cd6-9efc-c15350825d42",
-      "name": "Send message and wait for response",
-      "webhookId": "dc0a7e38-d6a0-4f7d-9e6f-a78d3592c4f9",
-      "credentials": {
-        "telegramApi": {
-          "id": "jXDOrBeZepPh1O5z",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "=104350862",
-        "text": "File già esistente...",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        928,
-        -144
-      ],
-      "id": "2bd783ae-69f0-4111-966e-611dce5da08b",
-      "name": "Send a text message",
-      "webhookId": "f96f2185-2dbe-422a-a311-09cf6e2e6c09",
-      "credentials": {
-        "telegramApi": {
-          "id": "jXDOrBeZepPh1O5z",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "=104350862",
-        "text": "Evento caricato",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1696,
-        64
-      ],
-      "id": "3b3425eb-ff50-4a6f-b8c7-1dd2d404ca8c",
-      "name": "Send a text message1",
-      "webhookId": "f96f2185-2dbe-422a-a311-09cf6e2e6c09",
-      "credentials": {
-        "telegramApi": {
-          "id": "jXDOrBeZepPh1O5z",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "documentId": {
+        "operation": "deleteFile",
+        "fileId": {
           "__rl": true,
-          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "value": "={{ $json.id_file }}",
           "mode": "id"
         },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Foglio1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
-        },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "id",
-              "lookupValue": "={{ $json.sha256_checksum }}"
-            }
-          ]
-        },
         "options": {}
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
       "position": [
-        368,
-        -32
+        944,
+        -1008
       ],
-      "id": "300deed9-0912-4268-8222-48251aaf2120",
-      "name": "Get row(s) in sheet",
-      "alwaysOutputData": true,
+      "id": "57ea5d53-b715-425b-b30c-8052f5541cc0",
+      "name": "Delete a file",
       "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "NxWaDBIk7Np1fizK",
-          "name": "Google Sheets account"
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -369,9 +588,43 @@
           },
           "conditions": [
             {
-              "id": "8ad032eb-3c50-4f29-8428-03521e8f212a",
+              "id": "1f00fbcd-48d5-48f9-bb38-9eba835f6475",
               "leftValue": "={{ $json.id }}",
-              "rightValue": "={{ $('Crypto').item.json.sha256_checksum }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        -984
+      ],
+      "id": "d67ed19d-a0b5-4025-9522-5814b8606320",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc6c579e-56d3-44eb-a20b-6069dc6f8c25",
+              "leftValue": "={{ $('Loop Over Items').item.json.edited_message.document.file_id }}",
+              "rightValue": "",
               "operator": {
                 "type": "string",
                 "operation": "exists",
@@ -386,25 +639,14 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        608,
-        -32
+        720,
+        -912
       ],
-      "id": "2e951f74-a44c-40f7-b135-122c2bba5543",
-      "name": "If"
+      "id": "4e40acf8-13af-40b6-83d5-b0f1a349ad4a",
+      "name": "If1"
     }
   ],
   "connections": {
-    "Telegram Trigger": {
-      "main": [
-        [
-          {
-            "node": "Read/Write Files from Disk",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Crypto": {
       "main": [
         [
@@ -442,7 +684,7 @@
       "main": [
         [
           {
-            "node": "Send message and wait for response",
+            "node": "Append or update row in sheet",
             "type": "main",
             "index": 0
           }
@@ -451,7 +693,13 @@
     },
     "Execute Command3": {
       "main": [
-        []
+        [
+          {
+            "node": "1. Get File ID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Code in JavaScript1": {
@@ -459,50 +707,6 @@
         [
           {
             "node": "Get row(s) in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Send a text message1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send message and wait for response": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send a text message": {
-      "main": [
-        [
-          {
-            "node": "Execute Command3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send a text message1": {
-      "main": [
-        [
-          {
-            "node": "Execute Command3",
             "type": "main",
             "index": 0
           }
@@ -520,18 +724,209 @@
         ]
       ]
     },
-    "If": {
+    "1. Get File ID": {
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Get File Path": {
+      "main": [
+        [
+          {
+            "node": "2. Get File Path1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Get File Path1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Get File Path2": {
+      "main": [
+        [
+          {
+            "node": "2. Get File Path1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "2. Get File Path",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
+            "node": "2. Get File Path2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "1. Get File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Send Message1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Send Message2": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Get File ID1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "1. Send Message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a file": {
+      "main": [
+        [
+          {
             "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Delete a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "1. Send Message1",
             "type": "main",
             "index": 0
           }
@@ -547,7 +942,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "15a0cde1-1359-43d9-a17d-7ad74f351a1a",
+  "versionId": "a80875a4-b6d7-4fb9-b267-ce717419faf2",
   "triggerCount": 1,
   "tags": [],
   "shared": [
