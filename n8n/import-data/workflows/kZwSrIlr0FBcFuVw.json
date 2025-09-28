@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-26T14:50:35.529Z",
-  "updatedAt": "2025-09-28T00:11:12.526Z",
+  "updatedAt": "2025-09-28T12:31:56.008Z",
   "id": "kZwSrIlr0FBcFuVw",
   "name": "test_n8n",
   "active": false,
@@ -206,8 +206,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        2640,
-        48
+        2816,
+        128
       ],
       "id": "6b2ae995-14af-4781-ac48-7c0083acc71d",
       "name": "Upload file",
@@ -248,7 +248,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1232,
+        1280,
         0
       ],
       "id": "49d6221d-60a5-496b-9039-6c26897bd0b0",
@@ -366,7 +366,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2192,
+        2368,
         416
       ],
       "id": "af3e7ce5-8994-4a62-9199-b2c59acab419",
@@ -395,7 +395,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1680,
+        1856,
         400
       ],
       "id": "c2ab869c-de5b-4091-9dd1-1febed13d6d7",
@@ -413,22 +413,22 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        2128,
-        48
+        2352,
+        128
       ],
       "id": "74665ce4-f658-40fc-8e76-04d4c13f937e",
       "name": "Information Extractor"
     },
     {
       "parameters": {
-        "model": "gemma3:12b",
+        "model": "gemma3:4b",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmOllama",
       "typeVersion": 1,
       "position": [
-        2080,
-        224
+        2304,
+        304
       ],
       "id": "273ac9bc-7e23-4773-9150-6ced3202a67a",
       "name": "Ollama Model",
@@ -446,7 +446,7 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        1936,
+        2112,
         416
       ],
       "id": "4b86b006-b93f-4fa3-ba1e-6fe60a539b69",
@@ -459,8 +459,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        1872,
-        48
+        2160,
+        128
       ],
       "id": "353cd276-0c0e-49d2-aa84-e03e1217ffc2",
       "name": "Execute Command2"
@@ -472,8 +472,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        3616,
-        -256
+        4400,
+        -336
       ],
       "id": "6fbfc9df-5292-4178-babb-7a34aaeacc77",
       "name": "Execute Command3",
@@ -611,8 +611,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3184,
-        48
+        3056,
+        16
       ],
       "id": "49df7dc8-e0ec-44e9-9649-b64eb84c1718",
       "name": "Append or update row in sheet",
@@ -638,20 +638,6 @@
     },
     {
       "parameters": {
-        "fileSelector": "={{ $('Compare Datasets').item.json.fileName }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1,
-      "position": [
-        2432,
-        48
-      ],
-      "id": "a6b87f71-1400-45d0-a3a7-33e263ef26c2",
-      "name": "Read/Write Files from Disk3"
-    },
-    {
-      "parameters": {
         "chatId": "=104350862",
         "text": "File già esistente...",
         "additionalFields": {}
@@ -674,60 +660,6 @@
     },
     {
       "parameters": {
-        "operation": "deleteFile",
-        "fileId": {
-          "__rl": true,
-          "value": "1KIrbLMZGMIW0_DFqcgSmSo_ex0XXYCqw",
-          "mode": "list",
-          "cachedResultName": "Osteocinema_Arsenico_e_i_vecchi_merletti.jpg",
-          "cachedResultUrl": "https://drive.google.com/file/d/1KIrbLMZGMIW0_DFqcgSmSo_ex0XXYCqw/view?usp=drivesdk"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        1168,
-        -704
-      ],
-      "id": "63737652-1325-402e-9389-df46d883b80f",
-      "name": "Delete a file",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JqSzUPdshsottef3",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "deleteFile",
-        "fileId": {
-          "__rl": true,
-          "value": "1Wwwz3fuNQvc2mf25l-JnJZmrnMaMVALg",
-          "mode": "list",
-          "cachedResultName": "Serata_Informativa_Benessere_del_Sonno_e_Materassi.pdf",
-          "cachedResultUrl": "https://drive.google.com/file/d/1Wwwz3fuNQvc2mf25l-JnJZmrnMaMVALg/view?usp=drivesdk"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        1392,
-        -704
-      ],
-      "id": "8f9a2830-b061-464c-844e-e784840755df",
-      "name": "Delete a file1",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JqSzUPdshsottef3",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -741,6 +673,12 @@
               "name": "folder_id",
               "value": "={{ $json.parents[0] }}",
               "type": "string"
+            },
+            {
+              "id": "49e61acb-a3c1-444e-9497-b600ab55c855",
+              "name": "sha256Checksum",
+              "value": "={{ $json.sha256Checksum }}",
+              "type": "string"
             }
           ]
         },
@@ -751,7 +689,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2992,
+        3072,
         352
       ]
     },
@@ -767,6 +705,10 @@
               {
                 "name": "folder_id",
                 "value": "={{ $('Clear Old Vectors').item.json.folder_id }}"
+              },
+              {
+                "name": "sha256Checksum",
+                "value": "={{ $('Clear Old Vectors').item.json.sha256Checksum }}"
               }
             ]
           }
@@ -861,7 +803,7 @@
       "parameters": {
         "code": {
           "execute": {
-            "code": "const { QdrantVectorStore } = require(\"@langchain/qdrant\");\nconst { OllamaEmbeddings } = require(\"@langchain/community/embeddings/ollama\");\n\nconst embeddings = new OllamaEmbeddings({\n  model: \"embeddinggemma:latest\",\n  baseUrl: \"http://ollama:11434\"\n});\n\nconst vectorStore = await QdrantVectorStore.fromExistingCollection(\n  embeddings,\n  {\n    url: \"http://qdrant:6333\",\n    collectionName: \"documents\",\n  }\n);\n\nconst fileIdToDelete = this.getInputData()[0].json.file_id;\nconst folderIdToDelete = this.getInputData()[0].json.folder_id;\n\nconst filter = {\n        must: [\n            {\n                key: \"metadata.file_id\",\n                match: {\n                    value: fileIdToDelete,\n                },\n            },\n        ],\n    }\n\n// const results = await vectorStore.similaritySearch(\"this\", 10, filter);\n// const idsToDelete = results.map((doc) => doc.id);\n\n// NOT IMPLEMENTED!\n// await vectorStore.delete({ ids: idsToDelete });\n\nvectorStore.client.delete(\"documents\", {\n  filter\n});\n\nreturn [ {json: { file_id: fileIdToDelete, folder_id: folderIdToDelete } } ];\n"
+            "code": "const { QdrantVectorStore } = require(\"@langchain/qdrant\");\nconst { OllamaEmbeddings } = require(\"@langchain/community/embeddings/ollama\");\n\nconst embeddings = new OllamaEmbeddings({\n  model: \"embeddinggemma:latest\",\n  baseUrl: \"http://ollama:11434\"\n});\n\nconst vectorStore = await QdrantVectorStore.fromExistingCollection(\n  embeddings,\n  {\n    url: \"http://qdrant:6333\",\n    collectionName: \"documents\",\n  }\n);\n\nconst fileId = this.getInputData()[0].json.file_id;\nconst folderId = this.getInputData()[0].json.folder_id;\nconst sha256ChecksumToDelete = this.getInputData()[0].json.sha256Checksum;\n\nconst filter = {\n        must: [\n            {\n                key: \"metadata.sha256Checksum\",\n                match: {\n                    value: sha256ChecksumToDelete,\n                },\n            },\n        ],\n    }\n\n// const results = await vectorStore.similaritySearch(\"this\", 10, filter);\n// const idsToDelete = results.map((doc) => doc.id);\n\n// NOT IMPLEMENTED!\n// await vectorStore.delete({ ids: idsToDelete });\n\nvectorStore.client.delete(\"documents\", {\n  filter\n});\n\nreturn [ {json: {\n  file_id: fileId,\n  folder_id: folderId,\n  sha256Checksum: sha256ChecksumToDelete\n  }\n} ];\n"
           }
         },
         "inputs": {
@@ -885,7 +827,7 @@
       "type": "@n8n/n8n-nodes-langchain.code",
       "typeVersion": 1,
       "position": [
-        3184,
+        3280,
         352
       ],
       "alwaysOutputData": false
@@ -911,7 +853,7 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        3408,
+        3504,
         352
       ],
       "id": "a14e3ead-7ac8-4423-b161-2e84fb45cca5",
@@ -920,13 +862,13 @@
     {
       "parameters": {
         "chatId": "=104350862",
-        "text": "File caricato...",
+        "text": "File caricato",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3392,
+        3344,
         -48
       ],
       "id": "8439515e-b36f-45bd-8c6f-cdedc7dc7f0f",
@@ -938,6 +880,240 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "=104350862",
+        "message": "=[{\n    \"titolo\": \"{{ $('Append or update row in sheet').item.json.titolo }}\",\n    \"data\": \"{{ $('Append or update row in sheet').item.json.data }}\",\n    \"ora\": \"{{ $('Append or update row in sheet').item.json.ora }}\",\n    \"dove\": \"{{ $('Append or update row in sheet').item.json.dove }}\",\n    \"descrizione\": \"{{ $('Append or update row in sheet').item.json.descrizione }}\",\n    \"contatto\": \"{{ $('Append or update row in sheet').item.json.contatto }}\"\n}]",
+        "responseType": "customForm",
+        "defineForm": "json",
+        "jsonOutput": "=[\n  {\n    \"fieldLabel\": \"titolo\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.titolo }}\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"data\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.data }}\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"ora\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.ora }}\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"dove\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.dove }}\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"descrizione\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.descrizione }}\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"contatto\",\n    \"placeholder\": \"{{ $('Append or update row in sheet').item.json.contatto }}\",\n    \"requiredField\": true\n  }\n]\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3584,
+        -112
+      ],
+      "id": "bae6041e-a0f7-46b8-aab0-d6bf7f723202",
+      "name": "Send message and wait for response",
+      "webhookId": "1595c6b3-e6f5-4b5e-99ea-41644cccc3d1",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4542da18-a965-4210-9600-28da5e29265e",
+              "name": "titolo",
+              "value": "={{ $json.data.text.parseJson()[0].titolo }}",
+              "type": "string"
+            },
+            {
+              "id": "27fee4bf-1645-45fe-ac90-2fda81d243c1",
+              "name": "data",
+              "value": "={{ $json.data.text.parseJson()[0].data }}",
+              "type": "string"
+            },
+            {
+              "id": "ce0e6ea0-c94f-4025-a1e0-f04206b9e817",
+              "name": "descrizione",
+              "value": "={{ $json.data.text.parseJson()[0].descrizione }}",
+              "type": "string"
+            },
+            {
+              "id": "201f2ec3-584b-492f-95c4-2d35d6033b12",
+              "name": "ora",
+              "value": "={{ $json.data.text.parseJson()[0].ora }}",
+              "type": "string"
+            },
+            {
+              "id": "c97c0ad3-334d-4342-a260-02c1a98fa29f",
+              "name": "dove",
+              "value": "={{ $json.data.text.parseJson()[0].dove }}",
+              "type": "string"
+            },
+            {
+              "id": "6fed318a-02e7-4615-ba10-4746c337d951",
+              "name": "contatto",
+              "value": "={{ $json.data.text.parseJson()[0].contatto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3792,
+        -112
+      ],
+      "id": "882fedb0-0927-406a-9198-14297d9cfb3b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "descrizione": "={{ $json.descrizione }}",
+            "dove": "={{ $json.dove }}",
+            "ora": "={{ $json.ora }}",
+            "data": "={{ $json.data }}",
+            "titolo": "={{ $json.titolo }}",
+            "id": "={{ $('Append or update row in sheet').item.json.id }}",
+            "contatto": "={{ $json.contatto }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "titolo",
+              "displayName": "titolo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ora",
+              "displayName": "ora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "dove",
+              "displayName": "dove",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "descrizione",
+              "displayName": "descrizione",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contatto",
+              "displayName": "contatto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_file",
+              "displayName": "id_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "titolo_file",
+              "displayName": "titolo_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4048,
+        -144
+      ],
+      "id": "89fc97ba-46e8-47ae-aa89-8c6651a9997b",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Compare Datasets').item.json.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        128
+      ],
+      "id": "a6b87f71-1400-45d0-a3a7-33e263ef26c2",
+      "name": "Read/Write Files from Disk3"
     }
   ],
   "connections": {
@@ -1232,33 +1408,11 @@
         ]
       ]
     },
-    "Read/Write Files from Disk3": {
-      "main": [
-        [
-          {
-            "node": "Upload file",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Send a text message": {
       "main": [
         [
           {
             "node": "Execute Command3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Delete a file": {
-      "main": [
-        [
-          {
-            "node": "Delete a file1",
             "type": "main",
             "index": 0
           }
@@ -1357,7 +1511,51 @@
       "main": [
         [
           {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
             "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
             "type": "main",
             "index": 0
           }
@@ -1372,8 +1570,24 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "2eca96ea-666e-434e-9b7d-efa3ac24613b",
+  "pinData": {
+    "Append or update row in sheet": [
+      {
+        "json": {
+          "descrizione": "Un promotore ONDA therapy parlerà di benessere del sonno e materassi. Donazione di 340€ per Osteoarc se si presentano 8 coppie o fino a 3 persone non in coppia dai 30 ai 75 anni. Buffet offerto.",
+          "dove": "SALA ASSOCIAZIONE via VIA MATTEOTTI, 7 Gornate-Olona",
+          "ora": "20:15",
+          "data": "1 ottobre 2025",
+          "titolo": "Evento informativo benessere del sonno",
+          "id_file": "1wW58-YyjMP5KgZN_QK69NWeZznchYo5H",
+          "id": "e062261747b250972faf6638fa8b98d5b377402d5b47d94f21dbdbe7178351d8",
+          "contatto": "segreteria@osteoarc.it | 339 6392152",
+          "titolo_file": "Evento_informativo_benessere_del_sonno.pdf"
+        }
+      }
+    ]
+  },
+  "versionId": "d701f858-46a1-4c8d-9efc-7b393680ffef",
   "triggerCount": 1,
   "tags": [],
   "shared": [

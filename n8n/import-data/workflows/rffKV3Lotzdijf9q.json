@@ -1,0 +1,571 @@
+{
+  "createdAt": "2025-09-28T12:32:12.033Z",
+  "updatedAt": "2025-09-28T12:52:01.373Z",
+  "id": "rffKV3Lotzdijf9q",
+  "name": "messaggio_associazione",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": true,
+          "chatIds": "104350862",
+          "userIds": "104350862"
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        -32
+      ],
+      "id": "0fb9f764-aad1-4d08-806d-5e961a85fd25",
+      "name": "Telegram Trigger",
+      "webhookId": "50dda5db-ffa9-4e37-aa92-a2e5d875e897",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "binaryData": true,
+        "dataPropertyName": "=sha256_checksum"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "a84f4237-a25b-4331-bac4-55c881f23400",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/tmp/{{ $json.update_id }}_{{ $binary.data.fileName }}",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "00f66620-1d32-4154-9e84-46fd78170725",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $('Read/Write Files from Disk').item.json.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        928,
+        64
+      ],
+      "id": "3d2d892d-c61e-429f-9743-f87eb7c6856f",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Telegram Trigger').item.json.update_id }}.{{ $binary.data.fileExtension }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "=1JasKxZmeWERdFwsj1zAsbxdqniYjX7Ax",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        64
+      ],
+      "id": "886e33f1-a5ca-43b7-a7ad-2b3c363b1be3",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JqSzUPdshsottef3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "=rm /tmp/*.*"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        -144
+      ],
+      "id": "50f45353-5733-45b7-b9a1-38af32786363",
+      "name": "Execute Command3",
+      "alwaysOutputData": false,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -32
+      ],
+      "id": "1311025d-619c-464e-96c6-4d328856ff06",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_file": "={{ $('Upload file').item.json.id }}",
+            "id": "={{ $('Upload file').item.json.sha256Checksum }}",
+            "messaggio": "={{ $('Telegram Trigger').item.json.message.caption }}",
+            "data": "={{ $json.data.Quando }}",
+            "ora": "={{ $json.data.Ora }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "messaggio",
+              "displayName": "messaggio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ora",
+              "displayName": "ora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_file",
+              "displayName": "id_file",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1488,
+        64
+      ],
+      "id": "f636502b-eb82-4fe1-9982-5f5b56eeef47",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "=104350862",
+        "message": "=Clicca su Rispondi o Respond e compila il form",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Quando",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Ora",
+              "placeholder": "15:00",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        64
+      ],
+      "id": "3c145031-d6a3-4cd6-9efc-c15350825d42",
+      "name": "Send message and wait for response",
+      "webhookId": "dc0a7e38-d6a0-4f7d-9e6f-a78d3592c4f9",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "=104350862",
+        "text": "File già esistente...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        -144
+      ],
+      "id": "2bd783ae-69f0-4111-966e-611dce5da08b",
+      "name": "Send a text message",
+      "webhookId": "f96f2185-2dbe-422a-a311-09cf6e2e6c09",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "=104350862",
+        "text": "Evento caricato",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1696,
+        64
+      ],
+      "id": "3b3425eb-ff50-4a6f-b8c7-1dd2d404ca8c",
+      "name": "Send a text message1",
+      "webhookId": "f96f2185-2dbe-422a-a311-09cf6e2e6c09",
+      "credentials": {
+        "telegramApi": {
+          "id": "jXDOrBeZepPh1O5z",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/120RTjkIjOZdHoKUgyEIhMr1W4wsqsitrQXj_KTiKNTQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id",
+              "lookupValue": "={{ $json.sha256_checksum }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        -32
+      ],
+      "id": "300deed9-0912-4268-8222-48251aaf2120",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NxWaDBIk7Np1fizK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8ad032eb-3c50-4f29-8428-03521e8f212a",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ $('Crypto').item.json.sha256_checksum }}",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        -32
+      ],
+      "id": "2e951f74-a44c-40f7-b135-122c2bba5543",
+      "name": "If"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command3": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "15a0cde1-1359-43d9-a17d-7ad74f351a1a",
+  "triggerCount": 1,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-09-28T12:32:12.033Z",
+      "updatedAt": "2025-09-28T12:32:12.033Z",
+      "role": "workflow:owner",
+      "workflowId": "rffKV3Lotzdijf9q",
+      "projectId": "G6CtU2rrwzyFRW0C",
+      "project": {
+        "createdAt": "2025-09-27T13:57:27.503Z",
+        "updatedAt": "2025-09-27T14:15:16.505Z",
+        "id": "G6CtU2rrwzyFRW0C",
+        "name": "Filippo Di Marco <filidm5795@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}
