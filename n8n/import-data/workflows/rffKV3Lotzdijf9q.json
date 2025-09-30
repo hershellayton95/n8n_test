@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-09-28T12:32:12.033Z",
-  "updatedAt": "2025-09-28T23:03:14.821Z",
+  "updatedAt": "2025-09-30T15:57:44.893Z",
   "id": "rffKV3Lotzdijf9q",
   "name": "Download Telegram File",
   "active": false,
@@ -15,8 +15,8 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        -176,
-        -984
+        256,
+        -1280
       ],
       "id": "a84f4237-a25b-4331-bac4-55c881f23400",
       "name": "Crypto"
@@ -32,8 +32,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        -400,
-        -984
+        32,
+        -1280
       ],
       "id": "00f66620-1d32-4154-9e84-46fd78170725",
       "name": "Read/Write Files from Disk"
@@ -46,8 +46,8 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        1168,
-        -1080
+        1600,
+        -1376
       ],
       "id": "3d2d892d-c61e-429f-9743-f87eb7c6856f",
       "name": "Read/Write Files from Disk1"
@@ -70,8 +70,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        1392,
-        -1080
+        1824,
+        -1376
       ],
       "id": "886e33f1-a5ca-43b7-a7ad-2b3c363b1be3",
       "name": "Upload file",
@@ -89,8 +89,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        2064,
-        -984
+        2496,
+        -1280
       ],
       "id": "50f45353-5733-45b7-b9a1-38af32786363",
       "name": "Execute Command3",
@@ -104,8 +104,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        48,
-        -984
+        480,
+        -1280
       ],
       "id": "1311025d-619c-464e-96c6-4d328856ff06",
       "name": "Code in JavaScript1"
@@ -137,8 +137,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        272,
-        -984
+        704,
+        -1280
       ],
       "id": "300deed9-0912-4268-8222-48251aaf2120",
       "name": "Get row(s) in sheet",
@@ -152,21 +152,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getFile?file_id={{ $json.message.document.file_id }}{{ $json.edited_message.document.file_id }}",
-        "options": {}
-      },
-      "name": "2. Get File Path",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
-      "position": [
-        -1072,
-        -1080
-      ],
-      "id": "f6dd17d6-6cf8-4cd2-909e-4ddfd287f1bb"
-    },
-    {
-      "parameters": {
-        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getUpdates",
+        "url": "=https://api.telegram.org/bot{{ $json.result.telegram_token }}/getUpdates",
         "options": {},
         "queryParametersUi": {
           "parameter": [
@@ -178,25 +164,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        -1968,
-        -912
+        -2208,
+        -1216
       ],
       "id": "09480172-36cb-42c0-8110-ed1842f4e8e5"
-    },
-    {
-      "parameters": {
-        "url": "=https://api.telegram.org/file/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/{{ $json.result.file_path }}",
-        "responseFormat": "file",
-        "options": {}
-      },
-      "name": "2. Get File Path1",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
-      "position": [
-        -848,
-        -984
-      ],
-      "id": "07370862-413f-43d0-b7e3-86c20c785c00"
     },
     {
       "parameters": {
@@ -216,25 +187,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -624,
-        -984
+        -192,
+        -1280
       ],
       "id": "a3a0d826-1ecc-4d7d-8850-a2ae19aeca4d",
       "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "url": "=https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getFile?file_id={{ $json.message.photo[0].file_id }}{{ $json.edited_message.photo[0].file_id }}",
-        "options": {}
-      },
-      "name": "2. Get File Path2",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 1,
-      "position": [
-        -1072,
-        -840
-      ],
-      "id": "37717101-5a6a-4b6c-8637-ab1e282623f5"
     },
     {
       "parameters": {
@@ -254,7 +211,7 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "exists",
+                      "operation": "notEmpty",
                       "singleValue": true
                     },
                     "id": "8f513b71-db74-4435-9617-c13f4005e600"
@@ -280,7 +237,7 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "exists",
+                      "operation": "notEmpty",
                       "singleValue": true
                     }
                   }
@@ -297,8 +254,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -1296,
-        -984
+        -864,
+        -1280
       ],
       "id": "32a38065-8462-4419-b0da-c7cd881d706e",
       "name": "Switch"
@@ -311,8 +268,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -1744,
-        -912
+        -1536,
+        -1216
       ],
       "id": "dc25bc37-5dce-4232-80ec-90ef0be9fd0c",
       "name": "Split Out"
@@ -325,8 +282,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -1520,
-        -912
+        -1312,
+        -1216
       ],
       "id": "ee865402-f871-4ab7-9e59-13a971171728",
       "name": "Loop Over Items"
@@ -344,8 +301,8 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -2192,
-        -912
+        -2880,
+        -1216
       ],
       "id": "6a32c46b-3a8b-414c-b1c1-cf59ddcc3537",
       "name": "Schedule Trigger"
@@ -357,8 +314,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2512,
-        -912
+        2944,
+        -1216
       ],
       "id": "9cbee3aa-726d-4e1e-8e6c-6c39539ccf36",
       "name": "Wait",
@@ -367,7 +324,7 @@
     {
       "parameters": {
         "requestMethod": "POST",
-        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/sendMessage",
+        "url": "=https://api.telegram.org/bot{{$('Convert Telegram Info').item.json.result.telegram_token}}/sendMessage",
         "options": {
           "bodyContentType": "json"
         },
@@ -392,15 +349,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        1840,
-        -840
+        2272,
+        -1136
       ],
       "id": "53ee609e-c41d-41c6-be7e-6e3111b2a6e3"
     },
     {
       "parameters": {
         "requestMethod": "POST",
-        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/sendMessage",
+        "url": "=https://api.telegram.org/bot{{$('Convert Telegram Info').item.json.result.telegram_token}}/sendMessage",
         "options": {
           "bodyContentType": "json"
         },
@@ -425,14 +382,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        1840,
-        -1080
+        2272,
+        -1376
       ],
       "id": "7bc193ce-5d15-4520-8066-2bda59f4e916"
     },
     {
       "parameters": {
-        "url": "https://api.telegram.org/bot8259464102:AAGmTyfoCRPDcIIrF9F9C1QQ-zMLZ0-I0Ik/getUpdates",
+        "url": "=https://api.telegram.org/bot{{$('Convert Telegram Info').item.json.result.telegram_token}}/getUpdates",
         "options": {},
         "queryParametersUi": {
           "parameter": [
@@ -447,8 +404,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
       "position": [
-        2288,
-        -984
+        2720,
+        -1280
       ],
       "id": "7bee3bb6-b3d7-4a35-a98f-7bd3e454c722"
     },
@@ -473,8 +430,7 @@
             "id_file": "={{ $('Upload file').item.json.id }}",
             "id": "={{ $('Upload file').item.json.sha256Checksum }}",
             "messaggio": "={{ $('Edit Fields').item.json.result['1'].message.caption }}",
-            "data": "={{ $json.data.Quando }}",
-            "ora": "={{ $json.data.Ora }}"
+            "data": "={{ $json.output.when }}"
           },
           "matchingColumns": [
             "id"
@@ -511,16 +467,6 @@
               "removed": false
             },
             {
-              "id": "ora",
-              "displayName": "ora",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
               "id": "id_file",
               "displayName": "id_file",
               "required": false,
@@ -539,8 +485,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1616,
-        -1080
+        2048,
+        -1376
       ],
       "id": "f636502b-eb82-4fe1-9982-5f5b56eeef47",
       "name": "Append or update row in sheet",
@@ -564,8 +510,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        944,
-        -1008
+        1376,
+        -1312
       ],
       "id": "57ea5d53-b715-425b-b30c-8052f5541cc0",
       "name": "Delete a file",
@@ -605,8 +551,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        496,
-        -984
+        928,
+        -1280
       ],
       "id": "d67ed19d-a0b5-4025-9522-5814b8606320",
       "name": "If"
@@ -639,11 +585,159 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        720,
-        -912
+        1152,
+        -1216
       ],
       "id": "4e40acf8-13af-40b6-83d5-b0f1a349ad4a",
       "name": "If1"
+    },
+    {
+      "parameters": {
+        "command": "=echo {;\necho \"\\\"telegram_token\\\": \\\"$TELEGRAM_TOKEN\\\",\";\necho \"\\\"telegram_chatId\\\":\\\"$TELEGRAM_CHAT_ID\\\"\";\necho };"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -2656,
+        -1216
+      ],
+      "id": "9bf2b5a9-9930-479b-85e8-73aee002db4c",
+      "name": "Take Telegram Info"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75098088-ac16-4b23-beeb-6b5585b70f3a",
+              "name": "result",
+              "value": "={{ $json.stdout.parseJson() }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2432,
+        -1216
+      ],
+      "id": "0ca4bad2-f77f-4b59-b4ee-30c2a79f34ce",
+      "name": "Convert Telegram Info"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a1e9fd9-9146-4577-b917-1a7b32168844",
+              "leftValue": "={{ $json.message.chat.id }}",
+              "rightValue": 104350862,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -1088,
+        -1280
+      ],
+      "id": "161b154b-a30e-4ff8-8eea-88b50c2f51cb",
+      "name": "ChatID Filter"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot{{ $('Convert Telegram Info').item.json.result.telegram_token }}/{{ $json.result.file_path }}",
+        "responseFormat": "file",
+        "options": {}
+      },
+      "name": "3. Download",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -1280
+      ],
+      "id": "07370862-413f-43d0-b7e3-86c20c785c00"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{$('Convert Telegram Info').item.json.result.telegram_token}}/getFile?file_id={{ $json.message.photo[0].file_id }}{{ $json.edited_message.photo[0].file_id }}",
+        "options": {}
+      },
+      "name": "2. Get Image File Path ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -1136
+      ],
+      "id": "37717101-5a6a-4b6c-8637-ab1e282623f5"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{$('Convert Telegram Info').item.json.result.telegram_token}}/getFile?file_id={{ $json.message.document.file_id }}{{ $json.edited_message.document.file_id }}",
+        "options": {}
+      },
+      "name": "2. Get Document File Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -1376
+      ],
+      "id": "f6dd17d6-6cf8-4cd2-909e-4ddfd287f1bb"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75098088-ac16-4b23-beeb-6b5585b70f3a",
+              "name": "result",
+              "value": "={{ $json.stdout.parseJson() }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1760,
+        -1216
+      ],
+      "id": "e5c7b4eb-4386-412b-adbb-322408d0a6fe",
+      "name": "Convert Telegram Message"
+    },
+    {
+      "parameters": {
+        "command": "=echo \"{{ $json.result[0].message.caption }}\" | awk -v IGNORECASE=1 'BEGIN{ORS=\" \"} {str=str $0 \" \"} END{\n  msg=str\n  sub(/.*[Mm]essaggio:[ ]*/, \"\", msg)\n  sub(/[ ;\\n]*[Dd]ata:.*/, \"\", msg)\n  data=str\n  sub(/.*[Dd]ata:[ ]*/, \"\", data)\n  sub(/[ \\n]*$/, \"\", msg)\n  sub(/^[ \\n]*/, \"\", msg)\n  sub(/[ \\n]*$/, \"\", data)\n  sub(/^[ \\n]*/, \"\", data)\n  gsub(/\"/, \"\\\\\\\"\", msg)\n  print \"{\\n  \\\"messaggio\\\": \\\"\" msg \"\\\",\\n  \\\"data\\\": \\\"\" data \"\\\"\\n}\"\n}'"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1984,
+        -1216
+      ],
+      "id": "1eea7d16-cdad-40f3-bccd-c11ba51cdbb0",
+      "name": "Convert Caption"
     }
   ],
   "connections": {
@@ -728,29 +822,7 @@
       "main": [
         [
           {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "2. Get File Path": {
-      "main": [
-        [
-          {
-            "node": "2. Get File Path1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "2. Get File Path1": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
+            "node": "Convert Caption",
             "type": "main",
             "index": 0
           }
@@ -768,29 +840,18 @@
         ]
       ]
     },
-    "2. Get File Path2": {
-      "main": [
-        [
-          {
-            "node": "2. Get File Path1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Switch": {
       "main": [
         [
           {
-            "node": "2. Get File Path",
+            "node": "2. Get Document File Path",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "2. Get File Path2",
+            "node": "2. Get Image File Path ",
             "type": "main",
             "index": 0
           }
@@ -813,7 +874,7 @@
         [],
         [
           {
-            "node": "Switch",
+            "node": "ChatID Filter",
             "type": "main",
             "index": 0
           }
@@ -824,7 +885,7 @@
       "main": [
         [
           {
-            "node": "1. Get File ID",
+            "node": "Take Telegram Info",
             "type": "main",
             "index": 0
           }
@@ -932,6 +993,94 @@
           }
         ]
       ]
+    },
+    "Take Telegram Info": {
+      "main": [
+        [
+          {
+            "node": "Convert Telegram Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Telegram Info": {
+      "main": [
+        [
+          {
+            "node": "1. Get File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatID Filter": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Download": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Get Image File Path ": {
+      "main": [
+        [
+          {
+            "node": "3. Download",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Get Document File Path": {
+      "main": [
+        [
+          {
+            "node": "3. Download",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Telegram Message": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Caption": {
+      "main": [
+        [
+          {
+            "node": "Convert Telegram Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -942,20 +1091,20 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "a80875a4-b6d7-4fb9-b267-ce717419faf2",
+  "versionId": "dc2e8d0e-75a1-43f2-8cc6-df227694bcf5",
   "triggerCount": 1,
   "tags": [],
   "shared": [
     {
-      "createdAt": "2025-09-28T12:32:12.033Z",
-      "updatedAt": "2025-09-28T12:32:12.033Z",
+      "createdAt": "2025-09-30T09:07:21.108Z",
+      "updatedAt": "2025-09-30T09:07:21.108Z",
       "role": "workflow:owner",
       "workflowId": "rffKV3Lotzdijf9q",
-      "projectId": "G6CtU2rrwzyFRW0C",
+      "projectId": "MXNVQrfg7tePUCMP",
       "project": {
-        "createdAt": "2025-09-27T13:57:27.503Z",
-        "updatedAt": "2025-09-27T14:15:16.505Z",
-        "id": "G6CtU2rrwzyFRW0C",
+        "createdAt": "2025-09-30T09:07:08.600Z",
+        "updatedAt": "2025-09-30T09:08:48.560Z",
+        "id": "MXNVQrfg7tePUCMP",
         "name": "Filippo Di Marco <filidm5795@gmail.com>",
         "type": "personal",
         "icon": null,

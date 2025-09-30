@@ -744,15 +744,15 @@
   "tags": [],
   "shared": [
     {
-      "createdAt": "2025-09-27T13:57:29.726Z",
-      "updatedAt": "2025-09-27T13:57:29.726Z",
+      "createdAt": "2025-09-30T09:07:21.108Z",
+      "updatedAt": "2025-09-30T09:07:21.108Z",
       "role": "workflow:owner",
       "workflowId": "vTN9y2dLXqTiDfPT",
-      "projectId": "G6CtU2rrwzyFRW0C",
+      "projectId": "MXNVQrfg7tePUCMP",
       "project": {
-        "createdAt": "2025-09-27T13:57:27.503Z",
-        "updatedAt": "2025-09-27T14:15:16.505Z",
-        "id": "G6CtU2rrwzyFRW0C",
+        "createdAt": "2025-09-30T09:07:08.600Z",
+        "updatedAt": "2025-09-30T09:08:48.560Z",
+        "id": "MXNVQrfg7tePUCMP",
         "name": "Filippo Di Marco <filidm5795@gmail.com>",
         "type": "personal",
         "icon": null,
